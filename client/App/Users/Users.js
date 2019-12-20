@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import styles from './Users.less';
 
-const Users = ({users, table}) => {
+const Users = ({users, tableId}) => {
     return (
         <div>
-            Users in "{table}":
+            Users in "{tableId}":
             <ul>
                 {users.map(user => {
                     return <li key={user.id}>{user.name}</li>
@@ -18,8 +18,8 @@ const Users = ({users, table}) => {
 
 const mapStateToProps = state => {
     return {
-        table: state.appData.table,
-        users: state.appData.users || []
+        tableId: state.table.tableId,
+        users: state.table.users || []
     };
 };
 

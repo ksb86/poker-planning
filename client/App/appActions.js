@@ -1,7 +1,15 @@
 export const actionTypes = {
-    ADD_USER_TO_FB: 'ADD_USER_TO_FB',
-    REMOVE_USER_FROM_FB: 'REMOVE_USER_FROM_FB',
-    USERS_UPDATED: 'USERS_UPDATED'
+    REMOVE_USER_DATA: 'REMOVE_USER_DATA',
+    USERS_UPDATED: 'USERS_UPDATED',
+    SET_USER_DATA: 'SET_USER_DATA',
+    SET_TABLE: 'SET_TABLE'
+};
+
+export const setTable = payload => {
+    return {
+        type: actionTypes.SET_TABLE,
+        payload
+    };
 };
 
 export const usersUpdated = payload => {
@@ -11,49 +19,15 @@ export const usersUpdated = payload => {
     };
 };
 
-export const addUserToFireBase = payload => {
+export const setUserData = payload => {
     return {
-        type: actionTypes.ADD_USER_TO_FB,
-        payload: new Promise((res, rej) => {
-            window.db.collection("users")
-            .add({
-              name: payload.name,
-              table: payload.table,
-              moderator: payload.moderator
-            })
-            .then(docRef => {
-                res({
-                    userId: docRef.id,
-                    moderator: payload.moderator,
-                    name: payload.name,
-                    table: payload.table
-                })
-            })
-            .catch(error => {
-                rej({
-                    error
-                })
-            });
-        })
+        type: actionTypes.SET_USER_DATA,
+        payload
     };
 };
 
-export const removeUserFromFirebase = payload => {
+export const removeUserData = () => {
     return {
-        type: actionTypes.REMOVE_USER_FROM_FB,
-        payload: new Promise((res, rej) => {
-            window.db.collection("users")
-            .doc(payload.userId)
-            .delete()
-            .then(() => {
-                res({
-                    id: payload.userId
-                });
-            }).catch(error => {
-                rej({
-                    error
-                });
-            });
-        })
+        type: actionTypes.REMOVE_USER_DATA
     };
 };

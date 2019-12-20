@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import config from '../../config';
 // import styles from './Cards.less';
 
-const Cards = ({table}) => {
+const Cards = ({}) => {
     return (
         <div>
             Cards:
@@ -18,7 +18,6 @@ const Cards = ({table}) => {
 
 const mapStateToProps = state => {
     return {
-        table: state.appData.table
     };
 };
 

@@ -1,50 +1,56 @@
 import React, {useState} from 'react';
 import shortid from 'shortid';
 import { connect } from 'react-redux';
-import { addUserToFireBase, usersUpdated } from '../appActions';
-
-// shortid.characters('0123456789abcdefghijklmnopqrstuvwxyz');
+import { usersUpdated, setUserData, setTable } from '../appActions';
 
 import styles from './Login.less';
 
-const Login = ({table, addUserToFireBase, usersUpdated }) => {
-    let newTable;
-    if (!table) {
-        newTable = shortid.generate();
+const Login = ({tableId, setUserData, setTable, usersUpdated }) => {
+    let newTableId;
+    if (!tableId) {
+        newTableId = shortid.generate();
     }
     const [formState, updateForm] = useState({
         loginName: '',
         loginError: null
     });
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
         if (!formState.loginName) {
             alert('Enter name');
             return;
         }
 
-        addUserToFireBase({
+        // TODO: try catch
+        const addUserResult = await window.db.collection("users").add({
             name: formState.loginName,
-            table: table || newTable,
-            moderator: Boolean(newTable)
-        }).then(() => {
-            if (newTable) {
-                // set up user change event listener here
-                console.log(`share url: ${document.location.origin}?t=${newTable}`);
-                history.pushState(null, null, `?t=${newTable}`);
-                window.unsubscribeInitial = db.collection('users').where('table', '==', newTable || '').onSnapshot(function(doc) {
-                    const usersData = doc.docs.map(userRaw => {
-                        const userData = userRaw.data();
-                        return {
-                            id: userRaw.id,
-                            ...userData
-                        };
-                    })
-                    usersUpdated(usersData);
-                });
-            }
+            table: tableId || newTableId,
+            moderator: Boolean(newTableId)
         });
+
+        setUserData({
+            userId: addUserResult.id,
+            name: formState.loginName,
+            moderator: Boolean(newTableId)
+        });
+
+        if (newTableId) {
+            history.pushState(null, null, `?t=${newTableId}`);
+            setTable({tableId: newTableId});
+
+            // console.log(`share url: ${document.location.origin}?t=${newTableId}`);
+            db.collection('users').where('table', '==', newTableId).onSnapshot(function(doc) {
+                const users = doc.docs.map(userRaw => {
+                    const userData = userRaw.data();
+                    return {
+                        id: userRaw.id,
+                        ...userData
+                    };
+                })
+                usersUpdated({users});
+            });
+        }
     };
 
     const handleInputChange = e => {
@@ -53,6 +59,7 @@ const Login = ({table, addUserToFireBase, usersUpdated }) => {
             loginName: e.target.value
         });
     };
+
     return (
         <div>
             <form className={styles.form} onSubmit={handleSubmit}>
@@ -71,10 +78,10 @@ const Login = ({table, addUserToFireBase, usersUpdated }) => {
                         <span/>
                     }
                     <button type="submit">
-                        {table ? 'Join' : 'Create'} Table
+                        {tableId ? 'Join' : 'Create'} Table
                     </button>
                 </div>
-                {!table ?
+                {!tableId ?
                     <div className={styles['form-item']}>
                         You will be the moderator
                     </div>
@@ -95,12 +102,13 @@ const Login = ({table, addUserToFireBase, usersUpdated }) => {
 
 const mapStateToProps = state => {
     return {
-        table: state.appData.table
+        tableId: state.table.tableId
     };
 };
 
 const mapDispatchToProps = {
-    addUserToFireBase,
+    setUserData,
+    setTable,
     usersUpdated
 };
 

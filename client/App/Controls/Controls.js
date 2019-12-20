@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 // import config from '../../config';
 // import styles from './Controls.less';
 
-const Controls = ({table, moderator}) => {
+const Controls = ({ moderator }) => {
     const handleStartClick = () => {
 
     };
 
-    if(moderator) {
+    if (moderator) {
         return (
             <div>
                 <br/>
@@ -22,8 +22,7 @@ const Controls = ({table, moderator}) => {
 
 const mapStateToProps = state => {
     return {
-        moderator: state.appData.moderator,
-        table: state.appData.table
+        moderator: state.currentUser.moderator
     };
 };
 

@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import appData from './App/appData';
+import currentUserData from './App/currentUserData';
+import tableData from './App/tableData';
 
 export default combineReducers({
-    appData
+    currentUser: currentUserData,
+    table: tableData
 });
