@@ -11,7 +11,6 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SET_USER_DATA: {
 
-            // debugger;
             if(!localStorage.getItem('popl-user-id')) {
                 localStorage.setItem('popl-user-id', action.payload.userId);
             }

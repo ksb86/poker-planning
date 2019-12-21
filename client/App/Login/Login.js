@@ -1,15 +1,11 @@
 import React, {useState} from 'react';
 import shortid from 'shortid';
 import { connect } from 'react-redux';
-import { usersUpdated, setUserData, setTable } from '../appActions';
+import { usersUpdated, tableUpdated, setUserData } from '../appActions';
 
 import styles from './Login.less';
 
-const Login = ({tableId, setUserData, setTable, usersUpdated }) => {
-    let newTableId;
-    if (!tableId) {
-        newTableId = shortid.generate();
-    }
+const Login = ({tableId, setUserData, usersUpdated, tableUpdated }) => {
     const [formState, updateForm] = useState({
         loginName: '',
         loginError: null
@@ -22,10 +18,15 @@ const Login = ({tableId, setUserData, setTable, usersUpdated }) => {
             return;
         }
 
+        let newTableId;
+        if (!tableId) {
+            newTableId = shortid.generate();
+        }
+
         // TODO: try catch
-        const addUserResult = await window.db.collection("users").add({
+        const addUserResult = await window.db.collection('users').add({
             name: formState.loginName,
-            table: tableId || newTableId,
+            tableId: tableId || newTableId,
             moderator: Boolean(newTableId)
         });
 
@@ -37,10 +38,16 @@ const Login = ({tableId, setUserData, setTable, usersUpdated }) => {
 
         if (newTableId) {
             history.pushState(null, null, `?t=${newTableId}`);
-            setTable({tableId: newTableId});
 
             // console.log(`share url: ${document.location.origin}?t=${newTableId}`);
-            db.collection('users').where('table', '==', newTableId).onSnapshot(function(doc) {
+
+            // TODO: try catch
+            const addTableResult = await window.db.collection('tables').add({
+                tableId: newTableId,
+                tableVoting: true
+            });
+
+            db.collection('users').where('tableId', '==', newTableId).onSnapshot(function(doc) {
                 const users = doc.docs.map(userRaw => {
                     const userData = userRaw.data();
                     return {
@@ -49,6 +56,13 @@ const Login = ({tableId, setUserData, setTable, usersUpdated }) => {
                     };
                 })
                 usersUpdated({users});
+            });
+
+            addTableResult.onSnapshot(function(doc) {
+                tableUpdated({
+                    fbTableId: doc.id,
+                    ...doc.data()
+                });
             });
         }
     };
@@ -78,7 +92,7 @@ const Login = ({tableId, setUserData, setTable, usersUpdated }) => {
                         <span/>
                     }
                     <button type="submit">
-                        {tableId ? 'Join' : 'Create'} Table
+                        Login and {tableId ? 'Join' : 'Create'} Room
                     </button>
                 </div>
                 {!tableId ?
@@ -108,8 +122,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     setUserData,
-    setTable,
-    usersUpdated
+    usersUpdated,
+    tableUpdated
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

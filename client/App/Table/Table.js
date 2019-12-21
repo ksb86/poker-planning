@@ -1,17 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Users from '../Users/Users';
 import Cards from '../Cards/Cards';
-import Controls from '../Controls/Controls';
-// import styles from './Table.less';
+import Graph from '../Graph/Graph';
+import styles from './Table.less';
 
-const Table = () => {
+const Table = ({ tableVoting }) => {
     return (
-        <div>
+        <div className={styles.table}>
             <Users />
-            <Cards />
-            <Controls />
+            {tableVoting ? <Cards /> : <Graph />}
         </div>
     );
 };
 
-export default Table;
+const mapStateToProps = state => {
+    return {
+        tableVoting: state.table.tableVoting
+    };
+};
+
+export default connect(mapStateToProps, null)(Table);

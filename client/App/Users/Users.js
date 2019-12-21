@@ -1,14 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import styles from './Users.less';
+import Indicator from '../shared/indicator';
 
-const Users = ({users, tableId}) => {
+import styles from './Users.less';
+
+const Users = ({users, tableVoting}) => {
     return (
         <div>
-            Users in "{tableId}":
-            <ul>
+            <ul className={styles.users}>
                 {users.map(user => {
-                    return <li key={user.id}>{user.name}</li>
+                    return (
+                        <li className={styles.user} key={user.id}>
+                            <span>{user.name}</span>
+                            {tableVoting ?
+                                <Indicator ready={Boolean(user.currentVote)} />
+                                :
+                                <span>{user.currentVote || '-'}</span>
+                            }
+                        </li>
+                    );
                 })}
             </ul>
             <br/>
@@ -18,8 +28,8 @@ const Users = ({users, tableId}) => {
 
 const mapStateToProps = state => {
     return {
-        tableId: state.table.tableId,
-        users: state.table.users || []
+        users: state.table.users || [],
+        tableVoting: state.table.tableVoting
     };
 };
 
