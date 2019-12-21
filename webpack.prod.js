@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {
-        dashboard: path.resolve(__dirname, "./dashboard/dashboard.js")
+        client: path.resolve(__dirname, "./client/client.js")
     },
     output: {
         path: path.resolve(__dirname, "./dist"),
@@ -43,7 +43,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "./dashboard/template.html")
+            template: path.resolve(__dirname, "./client/template.html")
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('development')

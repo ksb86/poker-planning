@@ -7,7 +7,7 @@
     "dev:client": "webpack -w --config webpack.dev",
     "build:client": "webpack -p --config webpack.prod",
     "prod": "yarn && yarn build:client && yarn restart",
-    "restart": "pm2 stop ppl-server; pm2 start --name ppl-server server/server.js"
+    "restart": "pm2 stop poker-planning; pm2 start --name poker-planning server/server.js"
   },
   "port": "8080",
   "dependencies": {
