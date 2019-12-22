@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Header from './Header/Header';
 import Login from './Login/Login';
@@ -6,11 +6,13 @@ import Table from './Table/Table';
 import styles from './App.less';
 import {
     usersUpdated,
-    setUserData,
-    tableUpdated
+    setCurrentUserData,
+    tableUpdated,
+    setTable
 } from './appActions';
 
-const App = ({tableId, userId, usersUpdated, setUserData, tableUpdated }) => {
+const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, setTable}) => {
+    const [lsUserIdCopy, update] = useState(localStorage.getItem('popl-user-id'));
     useEffect(() => {
         (async function getUserIdFromLocalStorage() {
             let tableIdParam;
@@ -25,6 +27,18 @@ const App = ({tableId, userId, usersUpdated, setUserData, tableUpdated }) => {
             }
 
             if (tableIdParam) {
+                setTable({
+                    tableId: tableIdParam
+                });
+
+                // TABLE CHANGES LISTENER
+                db.collection('tables').doc(tableIdParam).onSnapshot(function(doc) {
+                    tableUpdated({
+                        ...doc.data()
+                    });
+                });
+
+                // USER CHANGES LISTENER
                 db.collection('users').where('tableId', '==', tableIdParam).onSnapshot(function(doc) {
                     const users = doc.docs.map(userRaw => {
                         const userData = userRaw.data();
@@ -34,14 +48,6 @@ const App = ({tableId, userId, usersUpdated, setUserData, tableUpdated }) => {
                         };
                     })
                     usersUpdated({users});
-                });
-
-                db.collection('tables').where('tableId', '==', tableIdParam).onSnapshot(function(doc) {
-                    const table = doc.docs[0];
-                    tableUpdated({
-                        fbTableId: table.id,
-                        ...table.data()
-                    });
                 });
             }
 
@@ -56,7 +62,7 @@ const App = ({tableId, userId, usersUpdated, setUserData, tableUpdated }) => {
                         tableId: tableIdParam || null
                     });
 
-                    setUserData({
+                    setCurrentUserData({
                         tableId: tableIdParam || null,
                         userId: currentUser.id,
                         name: currentUser.data().name,
@@ -69,6 +75,9 @@ const App = ({tableId, userId, usersUpdated, setUserData, tableUpdated }) => {
         })();
     }, []); // no params - run once on first render
 
+    if (lsUserIdCopy && !userId) {
+        return 'loading...';
+    }
     if (!userId) {
         return <Login />;
     }
@@ -93,7 +102,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = {
     usersUpdated,
-    setUserData,
-    tableUpdated
+    setCurrentUserData,
+    tableUpdated,
+    setTable
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

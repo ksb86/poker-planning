@@ -2,7 +2,6 @@ import { actionTypes } from './appActions';
 
 const initialState = {
     tableId: null,
-    fbTableId: null,
     tableVoting: true,
     users: [],
 };
@@ -16,11 +15,16 @@ export default (state = initialState, action) => {
             };
         }
         case actionTypes.TABLE_UPDATED: {
+            console.log('hi');
             return {
                 ...state,
-                tableId: action.payload.tableId,
-                tableVoting: action.payload.tableVoting,
-                fbTableId: action.payload.fbTableId
+                ...action.payload
+            };
+        }
+        case actionTypes.SET_TABLE: {
+            return {
+                ...state,
+                tableId: action.payload.tableId
             };
         }
 

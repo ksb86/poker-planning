@@ -16,10 +16,26 @@ const Header = ({ userId, tableId, name, moderator, removeUserData }) => {
         document.location.href = '/';
     };
 
+    const clean = async () => {
+        const batch = db.batch();
+
+        const users = await db.collection('users').get();
+        const tables = await db.collection('tables').get();
+        [...users.docs, ...tables.docs].forEach(doc => {
+            batch.delete(doc.ref);
+        });
+
+        await batch.commit();
+        console.log('all users and tables deleted');
+        localStorage.removeItem('popl-user-id');
+        document.location.href = '/';
+    };
+
     return (
         <header>
             <div>
                 Better Voting Poker
+                <button onClick={clean}>clean</button>
             </div>
             <div>
                 {moderator && tableId ? <Controls /> : null }

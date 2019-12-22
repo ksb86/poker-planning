@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
-const Controls = ({ fbTableId, tableId, tableVoting }) => {
+const Controls = ({ tableId, tableVoting }) => {
+    console.log({tableVoting});
     const toggleVotingStatus = async () => {
-        const tableRef = window.db.collection('tables').doc(fbTableId);
+        console.log({tableId});
+        console.log({tableVoting});
+        const tableRef = window.db.collection('tables').doc(tableId);
         // TODO: try catch
         await tableRef.update({ tableVoting: !tableVoting });
         if (!tableVoting) {
@@ -23,7 +26,6 @@ const Controls = ({ fbTableId, tableId, tableVoting }) => {
 const mapStateToProps = state => {
     return {
         tableVoting: state.table.tableVoting,
-        fbTableId: state.table.fbTableId,
         tableId: state.table.tableId
     };
 };

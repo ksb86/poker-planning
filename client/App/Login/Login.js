@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import shortid from 'shortid';
 import { connect } from 'react-redux';
-import { usersUpdated, tableUpdated, setUserData } from '../appActions';
+import { usersUpdated, tableUpdated, setCurrentUserData, setTable } from '../appActions';
 
 import styles from './Login.less';
 
-const Login = ({tableId, setUserData, usersUpdated, tableUpdated }) => {
+const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTable }) => {
     const [formState, updateForm] = useState({
         loginName: '',
         loginError: null
@@ -14,63 +13,68 @@ const Login = ({tableId, setUserData, usersUpdated, tableUpdated }) => {
     const handleSubmit = async e => {
         e.preventDefault();
         if (!formState.loginName) {
-            alert('Enter name');
+            updateForm({
+                ...formState,
+                loginError: 'Please enter your name'
+            });
             return;
         }
-
-        let newTableId;
-        if (!tableId) {
-            newTableId = shortid.generate();
-        }
-
-        // TODO: try catch
-        const addUserResult = await window.db.collection('users').add({
-            name: formState.loginName,
-            tableId: tableId || newTableId,
-            moderator: Boolean(newTableId)
-        });
-
-        setUserData({
-            userId: addUserResult.id,
-            name: formState.loginName,
-            moderator: Boolean(newTableId)
-        });
-
-        if (newTableId) {
-            history.pushState(null, null, `?t=${newTableId}`);
-
-            // console.log(`share url: ${document.location.origin}?t=${newTableId}`);
-
+        let listenerTableId;
+        if (tableId) {
+            listenerTableId = tableId;
+        } else {
             // TODO: try catch
             const addTableResult = await window.db.collection('tables').add({
-                tableId: newTableId,
                 tableVoting: true
             });
-
-            db.collection('users').where('tableId', '==', newTableId).onSnapshot(function(doc) {
-                const users = doc.docs.map(userRaw => {
-                    const userData = userRaw.data();
-                    return {
-                        id: userRaw.id,
-                        ...userData
-                    };
-                })
-                usersUpdated({users});
-            });
-
-            addTableResult.onSnapshot(function(doc) {
-                tableUpdated({
-                    fbTableId: doc.id,
-                    ...doc.data()
-                });
-            });
+            listenerTableId = addTableResult.id;
+            history.pushState(null, null, `?t=${listenerTableId}`);
         }
+
+        setTable({
+            tableId: listenerTableId
+        });
+
+        // TABLE CHANGES LISTENER
+        db.collection('tables').doc(listenerTableId).onSnapshot(function(doc) {
+            tableUpdated({
+                ...doc.data()
+            });
+        });
+
+        // USER CHANGES LISTENER
+        db.collection('users').where('tableId', '==', listenerTableId).onSnapshot(function(doc) {
+            const users = doc.docs.map(userRaw => {
+                const userData = userRaw.data();
+                return {
+                    id: userRaw.id,
+                    ...userData
+                };
+            })
+            usersUpdated({users});
+        });
+
+        // ADD USER and SET CURRENT DATA
+        // console.log(`share url: ${document.location.origin}?t=${newTableId}`);
+        // TODO: try catch
+        const userData = {
+            name: formState.loginName,
+            tableId: listenerTableId,
+            moderator: Boolean(!tableId)
+        };
+        const addUserResult = await window.db.collection('users').add(userData);
+
+        setCurrentUserData({
+            userId: addUserResult.id,
+            ...userData
+        });
     };
 
     const handleInputChange = e => {
         updateForm({
             ...formState,
-            loginName: e.target.value
+            loginName: e.target.value,
+            loginError: null
         });
     };
 
@@ -78,10 +82,22 @@ const Login = ({tableId, setUserData, usersUpdated, tableUpdated }) => {
         <div>
             <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={styles['form-item']}>
-                    <label htmlFor="loginName">
+                    {/* <label htmlFor="loginName">
                         Name:
-                    </label>
-                    <input className={styles['form-input']} id="loginName" type="text" onChange={handleInputChange} />
+                    </label> */}
+                    <input
+                        id="loginName"
+                        className={styles['form-input']}
+                        type="text"
+                        placeholder="Your name here"
+                        autoComplete="off"
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div className={styles['form-item']}>
+                    <button type="submit">
+                        {tableId ? 'Join' : 'Create'} Room
+                    </button>
                 </div>
                 <div className={styles['form-item']}>
                     {formState.loginError ?
@@ -91,9 +107,6 @@ const Login = ({tableId, setUserData, usersUpdated, tableUpdated }) => {
                         :
                         <span/>
                     }
-                    <button type="submit">
-                        Login and {tableId ? 'Join' : 'Create'} Room
-                    </button>
                 </div>
                 {!tableId ?
                     <div className={styles['form-item']}>
@@ -121,9 +134,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    setUserData,
+    setCurrentUserData,
     usersUpdated,
-    tableUpdated
+    tableUpdated,
+    setTable
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
