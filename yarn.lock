@@ -6444,6 +6444,11 @@ socks@~2.3.2:
     ip "1.1.5"
     smart-buffer "^4.1.0"
 
+solitairewin@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/solitairewin/-/solitairewin-0.0.12.tgz#a3d8a6aa665b19b58fb8f542c27e3bd6bd4904aa"
+  integrity sha1-o9imqmZbGbWPuPVCwn471r1JBKo=
+
 sort-keys@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/sort-keys/-/sort-keys-1.1.2.tgz#441b6d4d346798f1b4e49e8920adfba0e543f9ad"

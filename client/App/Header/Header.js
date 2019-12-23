@@ -18,7 +18,7 @@ const Header = ({ userId, name, removeUserData }) => {
     return (
         <div className={styles.headerWrap}>
             <header>
-                <div>
+                <div className={styles.title}>
                     Better Voting Poker
                 </div>
                 <div>

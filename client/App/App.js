@@ -55,7 +55,6 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
             if (localStorageUserId) {
                 // TODO: try catch
                 const currentUserRef = await db.collection('users').doc(localStorageUserId);
-
                 const currentUser = await currentUserRef.get();
                 if (currentUser.exists) {
                     await currentUserRef.update({
@@ -69,7 +68,9 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
                         moderator: currentUser.data().moderator
                     });
                 } else {
-                    console.log(`No user found with id ${userId}`);
+                    console.log(`No user found with id ${localStorageUserId}`);
+                    localStorage.removeItem('popl-user-id');
+                    document.location.href = '/';
                 }
             }
         })();
