@@ -29,6 +29,7 @@ const Cards = ({tableVoting, userId, }) => {
                         </div>
                     );
                 })}
+
             </div>
         );
     }

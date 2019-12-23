@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import styles from './Controls.less';
 
 const Controls = ({ tableId, tableVoting }) => {
     console.log({tableVoting});
@@ -20,7 +21,11 @@ const Controls = ({ tableId, tableVoting }) => {
         }
     };
 
-    return <button type="button" onClick={toggleVotingStatus}>{tableVoting ? 'Stop Voting' : 'New Round'}</button>;
+    return (
+        <div className={styles.controls}>
+            <button type="button" onClick={toggleVotingStatus}>{tableVoting ? 'Stop Voting' : 'New Round'}</button>
+        </div>
+    );
 };
 
 const mapStateToProps = state => {

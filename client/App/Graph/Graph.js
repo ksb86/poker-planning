@@ -32,11 +32,7 @@ const Graph = ({ users }) => {
 
     return (
         <div className={styles.graphContainer}>
-            <Doughnut
-                data={barChartData}
-                width={100}
-                height={50}
-                options={{ maintainAspectRatio: false}} />
+            <Doughnut data={barChartData} />
         </div>
     );
 };

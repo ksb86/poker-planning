@@ -88,6 +88,7 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
                     <input
                         id="loginName"
                         className={styles['form-input']}
+                        autoFocus
                         type="text"
                         placeholder="Your name here"
                         autoComplete="off"
