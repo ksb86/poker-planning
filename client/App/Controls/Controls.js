@@ -7,17 +7,40 @@ const Controls = ({ tableId, tableVoting }) => {
     const toggleVotingStatus = async () => {
         console.log({tableId});
         console.log({tableVoting});
-        const tableRef = window.db.collection('tables').doc(tableId);
-        // TODO: try catch
-        await tableRef.update({ tableVoting: !tableVoting });
-        if (!tableVoting) {
-            const result = await db.collection('users').where('tableId', '==', tableId).get();
-            const clearVotesBatch = db.batch();
+        // const tableRef = window.db.collection('tables').doc(tableId);
 
-            result.docs.map(userRef => {
-                clearVotesBatch.update(userRef.ref, {"currentVote": firebase.firestore.FieldValue.delete()});
-            });
-            await clearVotesBatch.commit();
+        // TODO: try catch
+        db.ref(`tables/${tableId}/table/`).update({ tableVoting: !tableVoting });
+
+        if (!tableVoting) {
+            db.ref(`tables/${tableId}/users/`).transaction(function(users) {
+                return Object.entries(users).reduce((acc, [key, user]) => {
+                    delete user.currentVote;
+                    acc[key] = user;
+                    return acc;
+                }, {});
+                // if (post) {
+                //   if (post.stars && post.stars[uid]) {
+                //     post.starCount--;
+                //     post.stars[uid] = null;
+                //   } else {
+                //     post.starCount++;
+                //     if (!post.stars) {
+                //       post.stars = {};
+                //     }
+                //     post.stars[uid] = true;
+                //   }
+                // }
+                // return post;
+              });
+
+            // const result = await db.collection('users').where('tableId', '==', tableId).get();
+            // const clearVotesBatch = db.batch();
+
+            // result.docs.map(userRef => {
+            //     clearVotesBatch.update(userRef.ref, {"currentVote": firebase.firestore.FieldValue.delete()});
+            // });
+            // await clearVotesBatch.commit();
         }
     };
 

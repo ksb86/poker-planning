@@ -19,7 +19,8 @@
         <div id="root">loading..</div>
         <!-- The core Firebase JS SDK is always required and must be listed first -->
         <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-firestore.js"></script>
+        <!-- <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-firestore.js"></script> -->
+        <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-database.js"></script>
 
         <!-- TODO: Add SDKs for Firebase products that you want to use
         https://firebase.google.com/docs/web/setup#available-libraries -->
@@ -28,9 +29,10 @@
         firebase.initializeApp({
             apiKey: "AIzaSyC103JkgzqP3SZHKCM3mWo5JZ8OdDBLshw",
             authDomain: "poker-planning-9e2ae.firebaseapp.com",
+            databaseURL: "poker-planning-9e2ae.firebaseio.com",
             projectId: "poker-planning-9e2ae"
         });
-        window.db = window.firebase.firestore();
+        window.db = window.firebase.database();
         </script>
     </body>
 </html>

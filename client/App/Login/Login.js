@@ -24,10 +24,15 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
             listenerTableId = tableId;
         } else {
             // TODO: try catch
-            const addTableResult = await window.db.collection('tables').add({
-                tableVoting: true
-            });
-            listenerTableId = addTableResult.id;
+            const newTableRef = db.ref('tables').push();
+            const tableData = {
+                table: {
+                    tableVoting: true
+                },
+                users: null
+            };
+            newTableRef.set(tableData);
+            listenerTableId = newTableRef.key;
             history.pushState(null, null, `?t=${listenerTableId}`);
         }
 
@@ -36,38 +41,43 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
         });
 
         // TABLE CHANGES LISTENER
-        db.collection('tables').doc(listenerTableId).onSnapshot(function(doc) {
+        db.ref(`tables/${listenerTableId}/table`).on('value', snapshot => {
             tableUpdated({
-                ...doc.data()
+                ...snapshot.val()
             });
         });
 
         // USER CHANGES LISTENER
-        db.collection('users').where('tableId', '==', listenerTableId).onSnapshot(function(doc) {
-            const users = doc.docs.map(userRaw => {
-                const userData = userRaw.data();
+        db.ref(`tables/${listenerTableId}/users`).on('value', snapshot => {
+            // const users = Object.entries(snapshot.val() || {aksjhdkfh: {name: 'shane'}}).map(([key, value]) => {
+            const users = Object.entries(snapshot.val() || {}).map(([key, value]) => {
                 return {
-                    id: userRaw.id,
-                    ...userData
+                    id: key,
+                    ...value
                 };
-            })
+            });
+            console.log('users: ', users);
             usersUpdated({users});
         });
 
         // ADD USER and SET CURRENT DATA
         // console.log(`share url: ${document.location.origin}?t=${newTableId}`);
         // TODO: try catch
-        const userData = {
+        let userData = {
             name: formState.loginName,
-            tableId: listenerTableId,
             moderator: Boolean(!tableId)
         };
-        const addUserResult = await window.db.collection('users').add(userData);
 
-        setCurrentUserData({
-            userId: addUserResult.id,
+        var usersRef = db.ref(`tables/${listenerTableId}/users`);
+
+        var newUserRef = usersRef.push();
+        userData = {
+            userId: newUserRef.key,
             ...userData
-        });
+        }
+        newUserRef.set(userData);
+
+        setCurrentUserData(userData);
     };
 
     const handleInputChange = e => {

@@ -32,21 +32,22 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
                 });
 
                 // TABLE CHANGES LISTENER
-                db.collection('tables').doc(tableIdParam).onSnapshot(function(doc) {
+                db.ref(`tables/${tableIdParam}/table`).on('value', snapshot => {
                     tableUpdated({
-                        ...doc.data()
+                        ...snapshot.val()
                     });
                 });
 
                 // USER CHANGES LISTENER
-                db.collection('users').where('tableId', '==', tableIdParam).onSnapshot(function(doc) {
-                    const users = doc.docs.map(userRaw => {
-                        const userData = userRaw.data();
+                db.ref(`tables/${tableIdParam}/users`).on('value', snapshot => {
+                    // const users = Object.entries(snapshot.val() || {aksjhdkfh: {name: 'shane'}}).map(([key, value]) => {
+                    const users = Object.entries(snapshot.val() || {}).map(([key, value]) => {
                         return {
-                            id: userRaw.id,
-                            ...userData
+                            id: key,
+                            ...value
                         };
-                    })
+                    });
+                    console.log('users: ', users);
                     usersUpdated({users});
                 });
             }
@@ -54,18 +55,24 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
             const localStorageUserId = localStorage.getItem('popl-user-id');
             if (localStorageUserId) {
                 // TODO: try catch
-                const currentUserRef = await db.collection('users').doc(localStorageUserId);
-                const currentUser = await currentUserRef.get();
-                if (currentUser.exists) {
-                    await currentUserRef.update({
-                        tableId: tableIdParam || null
-                    });
+                // const currentUserRef = await db.collection('users').doc(localStorageUserId);
+                // const currentUser = await currentUserRef.get();
 
+                const currentUser = await new Promise((res, rej) => {
+                    db.ref(`tables/${tableIdParam}/users/${localStorageUserId}`).once('value', snapshot => {
+                        res(snapshot.val());
+                    });
+                });
+
+                if (currentUser) {
+                    // await currentUserRef.update({
+                    //     tableId: tableIdParam || null
+                    // });
                     setCurrentUserData({
                         tableId: tableIdParam || null,
-                        userId: currentUser.id,
-                        name: currentUser.data().name,
-                        moderator: currentUser.data().moderator
+                        userId: localStorageUserId,
+                        name: currentUser.name,
+                        moderator: currentUser.moderator
                     });
                 } else {
                     console.log(`No user found with id ${localStorageUserId}`);

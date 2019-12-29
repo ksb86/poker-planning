@@ -5,12 +5,12 @@ import {
     removeUserData
 } from '../appActions';
 
-const Header = ({ userId, name, removeUserData }) => {
+const Header = ({ userId, tableId, name, removeUserData }) => {
     const handleLogout = async e => {
         e.preventDefault();
 
         // TODO: try catch
-        await window.db.collection('users').doc(userId).delete();
+        await window.db.ref(`tables/${tableId}/users/${userId}`).remove();
         removeUserData();
         document.location.href = '/';
     };
@@ -36,7 +36,8 @@ const Header = ({ userId, name, removeUserData }) => {
 const mapStateToProps = state => {
     return {
         userId: state.currentUser.userId,
-        name: state.currentUser.name
+        name: state.currentUser.name,
+        tableId: state.table.tableId
     };
 };
 

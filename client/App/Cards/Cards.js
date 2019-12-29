@@ -4,13 +4,15 @@ import Card from '../shared/card';
 import config from '../../config';
 import styles from './Cards.less';
 
-const Cards = ({tableVoting, userId, }) => {
+const Cards = ({tableVoting, userId, tableId }) => {
     const [voteState, updateVoteState] = useState('');
 
     const handleCardClick = async point => {
         const newValue = Boolean(voteState) && voteState === point ? '' : point;
-        const currentUser = window.db.collection('users').doc(userId);
-        currentUser.update({ currentVote: newValue });
+
+        db.ref(`tables/${tableId}/users/${userId}`).update({
+            currentVote: newValue
+        });
         updateVoteState(newValue);
     };
 
@@ -40,7 +42,8 @@ const Cards = ({tableVoting, userId, }) => {
 const mapStateToProps = state => {
     return {
         tableVoting: state.table.tableVoting,
-        userId: state.currentUser.userId
+        userId: state.currentUser.userId,
+        tableId: state.table.tableId
     };
 };
 
