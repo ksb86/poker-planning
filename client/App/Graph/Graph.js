@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Doughnut } from 'react-chartjs-2';
 import styles from './Graph.less';
 
-const availableColors = ['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075'];
+const availableColors = ['#b81237', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075'];
 const Graph = ({ users }) => {
 
     if (!users.some(user => Boolean(user.currentVote))) {
