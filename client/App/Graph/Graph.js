@@ -34,7 +34,9 @@ const Graph = ({ users }) => {
 
     return (
         <div className={styles.graphContainer}>
-            <Doughnut data={barChartData} />
+            <Doughnut
+                options={{ legend: { position: 'right' } }}
+                data={barChartData} />
         </div>
     );
 };
