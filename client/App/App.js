@@ -23,7 +23,7 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
                 }
                 })?.split('=')[1];
             } catch (error) {
-                console.log('no tableId in url');
+                console.log('No table id in url');
             }
 
             if (tableIdParam) {
@@ -47,7 +47,7 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
                             ...value
                         };
                     });
-                    console.log('users: ', users);
+                    // console.log('users: ', users);
                     usersUpdated({users});
                 });
             }
@@ -77,7 +77,11 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
                 } else {
                     console.log(`No user found with id ${localStorageUserId}`);
                     localStorage.removeItem('popl-user-id');
-                    document.location.href = '/';
+                    let tParam = '';
+                    if (tableIdParam) {
+                        tParam = `?t=${tableIdParam}`;
+                    }
+                    document.location.href = `/${tParam}`;
                 }
             }
         })();

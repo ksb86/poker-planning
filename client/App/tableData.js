@@ -15,7 +15,6 @@ export default (state = initialState, action) => {
             };
         }
         case actionTypes.TABLE_UPDATED: {
-            console.log('hi');
             return {
                 ...state,
                 ...action.payload

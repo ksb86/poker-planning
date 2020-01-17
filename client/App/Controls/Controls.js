@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import styles from './Controls.less';
 
 const Controls = ({ tableId, tableVoting }) => {
-    console.log({tableVoting});
+    // console.log({tableVoting});
     const toggleVotingStatus = async () => {
-        console.log({tableId});
-        console.log({tableVoting});
+        // console.log({tableId});
+        // console.log({tableVoting});
         // const tableRef = window.db.collection('tables').doc(tableId);
 
         // TODO: try catch

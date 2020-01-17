@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Doughnut } from 'react-chartjs-2';
 import styles from './Graph.less';
+import config from '../../config';
 
 const availableColors = ['#b81237', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabebe', '#469990', '#e6beff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075'];
 const Graph = ({ users }) => {
@@ -24,10 +25,14 @@ const Graph = ({ users }) => {
 
         return acc;
     }, [[],[]]);
+    const chosenColors = uniquePoints.map(p => {
+        return availableColors[config.pointOptions.indexOf(p)];
+    })
+    // console.log('chosenColors: ', chosenColors);
     var barChartData = {
         labels: uniquePoints.map(p => `${p} points`),
         datasets: [{
-            backgroundColor: [...availableColors.slice(0, uniquePoints.length)],
+            backgroundColor: chosenColors, // [...availableColors.slice(0, uniquePoints.length)],
             data: occurences,
         }]
     };
