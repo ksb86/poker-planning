@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
 import styles from './Header.less';
 import {
@@ -15,7 +15,7 @@ const Header = ({ users, userId, tableId, name, removeUserData }) => {
         document.location.href = '/';
     };
 
-    // user was removed from room
+    // user was removed from table
     if (!users.some(user => user.id === userId)) {
         removeUserData();
         document.location.href = '/';
