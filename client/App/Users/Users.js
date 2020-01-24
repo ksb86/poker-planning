@@ -22,6 +22,10 @@ const Users = ({users, tableVoting, tableId, moderator}) => {
     };
     // TEMP
 
+    const handleDelete = async userId => {
+        await window.db.ref(`tables/${tableId}/users/${userId}`).remove();
+    };
+
     return (
         <div className={styles.users}>
             <ul className={styles.users}>
@@ -29,11 +33,14 @@ const Users = ({users, tableVoting, tableId, moderator}) => {
                     return (
                         <li className={styles.user} key={user.id}>
                             <span>{user.name}</span>
-                            {tableVoting ?
-                                <Indicator ready={Boolean(user.currentVote)} />
-                                :
-                                <span>{user.currentVote || '-'}</span>
-                            }
+                            <span className={styles.indicators}>
+                                {tableVoting ?
+                                    <Indicator ready={Boolean(user.currentVote)} />
+                                    :
+                                    <span>{user.currentVote || '-'}</span>
+                                }
+                                {moderator && !user.moderator && <span className={styles.deleteUser} onClick={() => handleDelete(user.id)}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg></span>}
+                            </span>
                         </li>
                     );
                 })}
