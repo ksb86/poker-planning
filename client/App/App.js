@@ -47,11 +47,6 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
                             ...value
                         };
                     });
-                    console.log('users: ', users);
-                    debugger;
-                    if (userId && !users.some(user => user.id === userId)) {
-                        alert('remove me!');
-                    }
                     usersUpdated({users});
                 });
             }

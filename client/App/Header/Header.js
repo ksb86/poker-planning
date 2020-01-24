@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux'
 import styles from './Header.less';
 import {
     removeUserData
 } from '../appActions';
 
-const Header = ({ userId, tableId, name, removeUserData }) => {
+const Header = ({ users, userId, tableId, name, removeUserData }) => {
     const handleLogout = async e => {
         e.preventDefault();
 
@@ -14,6 +14,12 @@ const Header = ({ userId, tableId, name, removeUserData }) => {
         removeUserData();
         document.location.href = '/';
     };
+
+    // user was removed from room
+    if (!users.some(user => user.id === userId)) {
+        removeUserData();
+        document.location.href = '/';
+    }
 
     return (
         <div className={styles.headerWrap}>
@@ -25,7 +31,7 @@ const Header = ({ userId, tableId, name, removeUserData }) => {
                     <span className={styles.userName}>
                         {name}
                     </span>
-                    <button type="button" onClick={handleLogout}>logout</button>
+                    <button type="button" onClick={handleLogout}>leave</button>
                 </div>
             </header>
         </div>
@@ -37,7 +43,8 @@ const mapStateToProps = state => {
     return {
         userId: state.currentUser.userId,
         name: state.currentUser.name,
-        tableId: state.table.tableId
+        tableId: state.table.tableId,
+        users: state.table.users,
     };
 };
 
