@@ -46,6 +46,9 @@ const Graph = ({ users }) => {
             <Doughnut
                 options={{ legend: { position: 'right' } }}
                 data={doughnutChartData} />
+            {/* {config.colors.map(color => {
+                return <div key={color} className="test" style={{'backgroundColor': color}}>&nbsp;</div>;
+            })} */}
         </div>
     );
 };
