@@ -9,29 +9,35 @@ const Graph = ({ users }) => {
         // no one voted
         return <p className={styles.noVotes}>No votes were recorded, click 'New Round' to try again!</p>;
     }
-    // organize data
-    const [uniquePoints, occurences] = users.reduce((acc, curr) => {
-        if (curr.currentVote) {
-            if (!acc[0].includes(curr.currentVote)) {
-                acc[0].push(curr.currentVote);
-                acc[1].push(1);
+
+    // organize data for chart
+    const uniquePointTracker = [];
+    const data = {};
+    users.forEach(({ currentVote }) => {
+        if (currentVote) {
+            if (!uniquePointTracker.includes(currentVote)) {
+                uniquePointTracker.push(currentVote);
+                data[currentVote] = 1;
             } else {
-                const index = acc[0].indexOf(curr.currentVote);
-                acc[1][index] +=1 ;
+                data[currentVote]++;
             }
         }
+    });
 
-        return acc;
-    }, [[],[]]);
-    const chosenColors = uniquePoints.map(p => {
+    const sortedDataKeys = Object.keys(data).sort((a,b) => a - b);
+    const sortedData = sortedDataKeys.map(key => {
+        return data[key];
+    });
+
+    const chosenColors = sortedDataKeys.map(p => {
         return config.colors[config.pointOptions.indexOf(p)];
-    })
-    // console.log('chosenColors: ', chosenColors);
-    var barChartData = {
-        labels: uniquePoints.map(p => `${p} points`),
+    });
+
+    var doughnutChartData = {
+        labels: sortedDataKeys.map(p => `${p} point${p !== '1' ? 's': ''}`),
         datasets: [{
-            backgroundColor: chosenColors, // [...config.colors.slice(0, uniquePoints.length)],
-            data: occurences,
+            backgroundColor: chosenColors,
+            data: sortedData,
         }]
     };
 
@@ -39,7 +45,7 @@ const Graph = ({ users }) => {
         <div className={styles.graphContainer}>
             <Doughnut
                 options={{ legend: { position: 'right' } }}
-                data={barChartData} />
+                data={doughnutChartData} />
         </div>
     );
 };
