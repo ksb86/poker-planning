@@ -108,7 +108,7 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
                 </div>
                 <div className={styles['form-item']}>
                     <button type="submit">
-                        {tableId ? 'Join' : 'Create'} Room
+                        {tableId ? 'Join' : 'Create'} Table
                     </button>
                 </div>
                 <div className={styles['form-item']}>

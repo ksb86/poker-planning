@@ -47,7 +47,6 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
                             ...value
                         };
                     });
-                    // console.log('users: ', users);
                     usersUpdated({users});
                 });
             }

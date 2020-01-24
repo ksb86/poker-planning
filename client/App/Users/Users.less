@@ -16,4 +16,26 @@
     &:last-of-type {
         border: none;
     }
+    &:hover {
+        .deleteUser {
+            display: flex;
+        }
+    }
+}
+.indicators {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.deleteUser {
+    display: none;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 5px;
+    margin-left: 5px;
+    &:hover {
+        path {
+            fill: red;
+        }
+    }
 }
