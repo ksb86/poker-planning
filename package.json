@@ -6,7 +6,8 @@
     "dev:server": "nodemon ./server/server.js",
     "dev:client": "webpack -w --config webpack.dev",
     "build:client": "webpack -p --config webpack.prod",
-    "prod": "yarn && yarn build:client && yarn restart",
+    "copyAssets": "cp ./client/assets/* ./dist/",
+    "prod": "yarn && yarn build:client && yarn copyAssets && yarn restart",
     "restart": "pm2 stop poker-planning; pm2 start --name poker-planning server/server.js"
   },
   "port": "8080",
