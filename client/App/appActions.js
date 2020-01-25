@@ -3,7 +3,8 @@ export const actionTypes = {
     USERS_UPDATED: 'USERS_UPDATED',
     SET_USER_DATA: 'SET_USER_DATA',
     TABLE_UPDATED: 'TABLE_UPDATED',
-    SET_TABLE: 'SET_TABLE'
+    SET_TABLE: 'SET_TABLE',
+    UPDATE_CURRENT_USER_NAME: 'UPDATE_CURRENT_USER_NAME'
 };
 
 export const usersUpdated = payload => {
@@ -16,6 +17,12 @@ export const usersUpdated = payload => {
 export const setCurrentUserData = payload => {
     return {
         type: actionTypes.SET_USER_DATA,
+        payload
+    };
+};
+export const updateCurrentUserName = payload => {
+    return {
+        type: actionTypes.UPDATE_CURRENT_USER_NAME,
         payload
     };
 };

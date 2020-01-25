@@ -103,7 +103,7 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
                         placeholder="Your name here"
                         autoComplete="off"
                         onChange={handleInputChange}
-                        maxLength="30"
+                        maxLength="20"
                     />
                 </div>
                 <div className={styles['form-item']}>

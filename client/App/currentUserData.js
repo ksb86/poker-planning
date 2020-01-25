@@ -21,6 +21,13 @@ export default (state = initialState, action) => {
             };
         }
 
+        case actionTypes.UPDATE_CURRENT_USER_NAME: {
+            return {
+                ...state,
+                name: action.payload
+            };
+        }
+
         case actionTypes.REMOVE_USER_DATA: {
             localStorage.removeItem('popl-user-id');
 
