@@ -47,7 +47,6 @@ const Controls = ({ tableId, tableVoting }) => {
     return (
         <div className={styles.controls}>
             <button type="button" onClick={toggleVotingStatus}>{tableVoting ? 'Stop Voting' : 'New Round'}</button>
-            <div className={styles.hint}>↑↑↓↓←→←→BA</div>
         </div>
     );
 };

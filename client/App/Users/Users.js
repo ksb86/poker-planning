@@ -52,12 +52,7 @@ const Users = ({users, tableVoting, tableId, moderator, easter}) => {
                 })}
             </ul>
             {moderator && tableId ? <Controls /> : null }
-            <>
-                <br/>
-                <br/>
-                <br/>
-                {/* <button onClick={clean}>clean</button> */}
-            </>
+            <div className={styles.hint}>↑↑↓↓←→←→BA</div>
         </div>
     );
 };
