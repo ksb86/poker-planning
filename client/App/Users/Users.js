@@ -5,7 +5,7 @@ import Indicator from '../shared/indicator';
 import X from '../shared/X';
 import styles from './Users.less';
 
-const Users = ({users, tableVoting, tableId, moderator}) => {
+const Users = ({users, tableVoting, tableId, moderator, easter}) => {
     // TEMP
     // const clean = async () => {
     //     const batch = db.batch();
@@ -35,7 +35,7 @@ const Users = ({users, tableVoting, tableId, moderator}) => {
                 {users.map(user => {
                     return (
                         <li className={styles.user} key={user.id}>
-                            <span>{user.name}</span>
+                            <span>{user.name}{easter && <span className={styles.points}>{user.points || '0'} pts</span>}</span>
                             <span className={styles.indicators}>
                                 {tableVoting ?
                                     <Indicator ready={Boolean(user.currentVote)} />
@@ -67,7 +67,8 @@ const mapStateToProps = state => {
         users: state.table.users || [],
         tableVoting: state.table.tableVoting,
         tableId: state.table.tableId,
-        moderator: state.currentUser.moderator
+        moderator: state.currentUser.moderator,
+        easter: state.table.easter
     };
 };
 

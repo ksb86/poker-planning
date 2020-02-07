@@ -5,6 +5,7 @@ const initialState = {
     name: null,
     moderator: false,
     addUserError: null,
+    points: 0,
 };
 
 export default (state = initialState, action) => {
@@ -32,6 +33,22 @@ export default (state = initialState, action) => {
             localStorage.removeItem('popl-user-id');
 
             return initialState;
+        }
+
+        case actionTypes.USERS_UPDATED: {
+            if (state.userId) {
+                const currentUser = action.payload.users.find(user => user.id === state.userId);
+                if (currentUser) {
+                    return {
+                        ...state,
+                        points: currentUser.points,
+                    };
+                }
+
+                return state;
+            }
+
+            return state;
         }
 
         default: {

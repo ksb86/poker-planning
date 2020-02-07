@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import Card from '../shared/card';
+import useInterval from '@use-it/interval';
 import config from '../../config';
+import Card from '../shared/card';
 import styles from './Cards.less';
 
-const Cards = ({tableVoting, userId, tableId }) => {
+const Cards = ({userId, tableId, easter}) => {
     const [voteState, updateVoteState] = useState('');
+    const [cards, setCards] = useState(config.pointOptions);
+    const [lucky, setLucky] = useState(false);
+
+    useInterval(() => {
+        if (easter && lucky) {
+            const newCards = [...cards];
+
+            for (let i = newCards.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [newCards[i], newCards[j]] = [newCards[j], newCards[i]];
+            }
+
+            setCards(newCards);
+        }
+    }, 100);
+
+    const handleLuckyClick = () => {
+        if (lucky) {
+            setCards(config.pointOptions);
+        }
+        setLucky(!lucky);
+    };
 
     const handleCardClick = async point => {
         const newValue = Boolean(voteState) && voteState === point ? '' : point;
@@ -16,14 +39,19 @@ const Cards = ({tableVoting, userId, tableId }) => {
         updateVoteState(newValue);
     };
 
-    if (tableVoting) {
-        return (
-            <div className={styles.cards}>
-                {config.pointOptions.map((point, i) => {
+    return (
+        <div className={styles.cards}>
+            {easter &&
+                <div>
+                    <button id="imFeelingLucky" className={styles.luckyBtn} onMouseDown={handleLuckyClick}>I'm Feeling Lucky</button>
+                </div>
+            }
+            <div className={styles.cardsInner}>
+                {cards.map((point, i) => {
                     return (
                         <div
                             key={`${i}-${point}`}
-                            onClick={() => handleCardClick(point)} >
+                            onMouseDown={() => handleCardClick(point)} >
                             <Card
                                 isSelected={voteState === point}
                                 point={point}
@@ -31,19 +59,16 @@ const Cards = ({tableVoting, userId, tableId }) => {
                         </div>
                     );
                 })}
-
             </div>
-        );
-    }
-
-    return null;
+        </div>
+    );
 };
 
 const mapStateToProps = state => {
     return {
-        tableVoting: state.table.tableVoting,
         userId: state.currentUser.userId,
-        tableId: state.table.tableId
+        tableId: state.table.tableId,
+        easter: state.table.easter,
     };
 };
 

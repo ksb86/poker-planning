@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Header from './Header/Header';
 import Login from './Login/Login';
-import Table from './Table/Table';
+import Main from './Main/Main';
 import styles from './App.less';
+
 import {
     usersUpdated,
     setCurrentUserData,
@@ -71,7 +72,8 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
                         tableId: tableIdParam || null,
                         userId: localStorageUserId,
                         name: currentUser.name,
-                        moderator: currentUser.moderator
+                        moderator: currentUser.moderator,
+                        points: currentUser.points
                     });
                 } else {
                     console.log(`No user found with id ${localStorageUserId}`);
@@ -96,11 +98,7 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
     return (
         <div>
             <Header />
-            {tableId ?
-                <Table />
-                :
-                <p>You're all alone, want to join a table?</p>
-            }
+            {tableId && <Main />}
         </div>
     );
 };

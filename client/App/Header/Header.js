@@ -7,7 +7,7 @@ import {
     updateCurrentUserName
 } from '../appActions';
 
-const Header = ({ users, userId, tableId, name, removeUserData, updateCurrentUserName }) => {
+const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }) => {
     const [editModeOn, updateEditMode] = useState(false);
     const [newName, updateNewName] = useState(name);
     const handleLogout = async e => {
@@ -16,14 +16,9 @@ const Header = ({ users, userId, tableId, name, removeUserData, updateCurrentUse
         // TODO: try catch
         await window.db.ref(`tables/${tableId}/users/${userId}`).remove();
         removeUserData();
+        console.log('1');
         document.location.href = '/';
     };
-
-    // user was removed from table
-    if (!users.some(user => user.id === userId)) {
-        removeUserData();
-        document.location.href = '/';
-    }
 
     const toggleEditMode = () => {
         updateEditMode(!editModeOn);
@@ -31,13 +26,13 @@ const Header = ({ users, userId, tableId, name, removeUserData, updateCurrentUse
 
     const handleSaveNewName = e => {
         e.preventDefault();
-
-        if (newName) {
+        const nameToSave = newName?.trim();
+        if (nameToSave) {
             db.ref(`tables/${tableId}/users/${userId}`).update({
-                name: newName
+                name: nameToSave
             });
-            updateCurrentUserName(newName);
-            updateEditMode(false);
+            updateCurrentUserName(nameToSave);
+            toggleEditMode()
         } else {
             document.getElementById('updateName').focus();
         }
@@ -70,7 +65,7 @@ const Header = ({ users, userId, tableId, name, removeUserData, updateCurrentUse
                                 onChange={(e) => updateNewName(e.target.value)}
                                 onKeyUp={handleNewNameKeyUp}
                             />
-                            <button className={styles.saveNewNameBtn} disabled={!Boolean(newName.length)} type="submit">Save</button>
+                            <button className={styles.saveNewNameBtn} disabled={!Boolean(newName?.trim().length)} type="submit">Save</button>
                             <button className={styles.cancelNewNameBtn}  type="button" onClick={toggleEditMode}>Cancel</button>
                         </form>
                         :
@@ -91,7 +86,6 @@ const mapStateToProps = state => {
         userId: state.currentUser.userId,
         name: state.currentUser.name,
         tableId: state.table.tableId,
-        users: state.table.users,
     };
 };
 

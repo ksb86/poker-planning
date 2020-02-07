@@ -1,22 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import cx from 'classnames';
 import { connect } from 'react-redux';
-import Users from '../Users/Users';
+import Slots from '../Games/Slots';
 import Cards from '../Cards/Cards';
-import Graph from '../Graph/Graph';
 import styles from './Table.less';
 
-const Table = ({ tableVoting }) => {
+const Table = ({ easter }) => {
+    const [tab, setTab] = useState('cards');
+
     return (
         <div className={styles.table}>
-            <Users />
-            {tableVoting ? <Cards /> : <Graph />}
+            {easter &&
+                <div className={styles.nav}>
+                    <div className={cx(styles.navItem, {[styles.navActive]: tab === 'cards' })} onClick={() => setTab('cards')}>
+                        Cards
+                    </div>
+                    <div className={cx(styles.navItem, {[styles.navActive]: tab === 'slots' })} onClick={() => setTab('slots')}>
+                        Slots
+                    </div>
+                </div>
+            }
+
+            {(tab === 'cards') &&
+                <Cards />
+            }
+            {(tab === 'slots') &&
+                <Slots />
+            }
         </div>
     );
 };
 
 const mapStateToProps = state => {
     return {
-        tableVoting: state.table.tableVoting
+        easter: state.table.easter,
     };
 };
 
