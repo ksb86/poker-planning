@@ -13,7 +13,6 @@ export default (state = initialState, action) => {
             const userId = localStorage.getItem('popl-user-id');
             if (userId && !action.payload.users.some(user => user.id === userId)) {
                 // user was removed from table
-                console.log('hisss');
                 localStorage.removeItem('popl-user-id');
                 document.location.href = '/';
             }

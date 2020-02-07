@@ -5,7 +5,6 @@ import styles from './Slider.less';
 const Slider = ({ }) => {
     const [left, setLeft] = useState(0);
     const running = useRef(false);
-    console.log('render');
 
     // const increment = left => left + 1;
     useEffect(() => {
@@ -23,7 +22,6 @@ const Slider = ({ }) => {
                 }
                 return left;
             });
-            console.log('This will run every second!');
         }, 10);
         return () => {
             clearInterval(interval);

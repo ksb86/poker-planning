@@ -16,7 +16,6 @@ const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }
         // TODO: try catch
         await window.db.ref(`tables/${tableId}/users/${userId}`).remove();
         removeUserData();
-        console.log('1');
         document.location.href = '/';
     };
 

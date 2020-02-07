@@ -48,7 +48,6 @@ const Slots = ({ tableId, userId, userPoints }) => {
                     score += 99;
                 }
             }
-            console.log('userPoints: ', userPoints);
             db.ref(`tables/${tableId}/users/${userId}`).update({
                 points: userPoints + score
             });
