@@ -4,7 +4,7 @@ const initialState = {
     tableId: null,
     tableVoting: true,
     users: [],
-    easter: true
+    easter: false
 };
 
 export default (state = initialState, action) => {
