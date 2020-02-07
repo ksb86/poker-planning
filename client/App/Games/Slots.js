@@ -4,7 +4,7 @@ import useInterval from '@use-it/interval';
 import styles from './Slots.less';
 
 const Slots = ({ tableId, userId, userPoints }) => {
-    const [options, setOptions] = useState(['💰', '🕹', '🇺🇸', '🎉', '💩', '👀', '😂', '🍔', '💾'])
+    const [options, setOptions] = useState(['💰', '🌎', '🎹', '🎉', '😂', '💩', '👀', '🍔', '💾'])
 
     const [scoredPoints, setScoredPoints] = useState(0);
     const [numStopped, setNumStopped] = useState(0);
