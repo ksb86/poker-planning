@@ -1,29 +1,22 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux'
 import cx from 'classnames';
-import styles from './Header.less';
 import {
     removeUserData,
     updateCurrentUserName
 } from '../appActions';
+import styles from './Header.less';
 
-const Header = ({ users, userId, tableId, name, removeUserData, updateCurrentUserName }) => {
+const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }) => {
     const [editModeOn, updateEditMode] = useState(false);
     const [newName, updateNewName] = useState(name);
     const handleLogout = async e => {
         e.preventDefault();
 
-        // TODO: try catch
         await window.db.ref(`tables/${tableId}/users/${userId}`).remove();
         removeUserData();
         document.location.href = '/';
     };
-
-    // user was removed from table
-    if (!users.some(user => user.id === userId)) {
-        removeUserData();
-        document.location.href = '/';
-    }
 
     const toggleEditMode = () => {
         updateEditMode(!editModeOn);
@@ -31,13 +24,13 @@ const Header = ({ users, userId, tableId, name, removeUserData, updateCurrentUse
 
     const handleSaveNewName = e => {
         e.preventDefault();
-
-        if (newName) {
+        const nameToSave = newName?.trim();
+        if (nameToSave) {
             db.ref(`tables/${tableId}/users/${userId}`).update({
-                name: newName
+                name: nameToSave
             });
-            updateCurrentUserName(newName);
-            updateEditMode(false);
+            updateCurrentUserName(nameToSave);
+            toggleEditMode()
         } else {
             document.getElementById('updateName').focus();
         }
@@ -60,7 +53,7 @@ const Header = ({ users, userId, tableId, name, removeUserData, updateCurrentUse
                         <form onSubmit={handleSaveNewName}>
                             <input
                                 id="updateName"
-                                className={cx(styles['form-input'], styles.editNameInput)}
+                                className={cx('form-input', styles.editNameInput)}
                                 type="text"
                                 placeholder="New name here"
                                 autoComplete="off"
@@ -70,15 +63,15 @@ const Header = ({ users, userId, tableId, name, removeUserData, updateCurrentUse
                                 onChange={(e) => updateNewName(e.target.value)}
                                 onKeyUp={handleNewNameKeyUp}
                             />
-                            <button className={styles.saveNewNameBtn} disabled={!Boolean(newName.length)} type="submit">Save</button>
-                            <button className={styles.cancelNewNameBtn}  type="button" onClick={toggleEditMode}>Cancel</button>
+                            <button className={cx('button', styles.saveNewNameBtn)} type="submit" disabled={!Boolean(newName?.trim().length)}>Save</button>
+                            <button className={cx('button', styles.cancelNewNameBtn)} type="button" onClick={toggleEditMode}>Cancel</button>
                         </form>
                         :
                         <span className={styles.userName} onClick={toggleEditMode}>
                             {name}
                         </span>
                     }
-                    <button className={styles.leaveBtn} type="button" onClick={handleLogout}>leave</button>
+                    <button className={cx('button', styles.leaveBtn)} type="button" onClick={handleLogout}>leave</button>
                 </div>
             </header>
         </div>
@@ -86,18 +79,15 @@ const Header = ({ users, userId, tableId, name, removeUserData, updateCurrentUse
 };
 
 
-const mapStateToProps = state => {
-    return {
-        userId: state.currentUser.userId,
-        name: state.currentUser.name,
-        tableId: state.table.tableId,
-        users: state.table.users,
-    };
-};
+const mapStateToProps = state => ({
+    userId: state.currentUser.userId,
+    name: state.currentUser.name,
+    tableId: state.table.tableId,
+});
 
 const mapDispatchToProps = {
     removeUserData,
-    updateCurrentUserName
+    updateCurrentUserName,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

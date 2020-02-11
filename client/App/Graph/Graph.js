@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Doughnut } from 'react-chartjs-2';
-import styles from './Graph.less';
 import config from '../../config';
+import styles from './Graph.less';
 
 const Graph = ({ users }) => {
     if (!users.some(user => Boolean(user.currentVote))) {
@@ -46,17 +46,12 @@ const Graph = ({ users }) => {
             <Doughnut
                 options={{ legend: { position: 'right' } }}
                 data={doughnutChartData} />
-            {/* {config.colors.map(color => {
-                return <div key={color} className="test" style={{'backgroundColor': color}}>&nbsp;</div>;
-            })} */}
         </div>
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        users: state.table.users
-    };
-};
+const mapStateToProps = state => ({
+    users: state.table.users,
+});
 
 export default connect(mapStateToProps, null)(Graph);

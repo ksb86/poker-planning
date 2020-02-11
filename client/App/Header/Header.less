@@ -1,7 +1,7 @@
-@import '../shared.less';
+@import '../styles/variables.less';
 
 .headerWrap {
-    background: #b81237;
+    background: @red-bg;
     margin-bottom: 20px;
 }
 header {
@@ -10,7 +10,7 @@ header {
     justify-content: space-between;
     max-width: 1100px;
     margin: auto;
-    color: white;
+    color: @white;
     align-items: center;
 
     @media (max-width: 620px) {
@@ -41,15 +41,12 @@ header {
     margin-left: 10px;
 
     &:disabled {
-        background: rgba(6,114,204,1);
-        color: lightgrey;
+        background: @blue-button-disabled;
+        color: @grey-border-1;
         cursor: not-allowed;
     }
 }
 .userName {
     cursor: pointer;
-
-    &:hover {
-        text-decoration: underline;
-    }
+    text-decoration: underline;
 }

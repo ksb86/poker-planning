@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { usersUpdated, tableUpdated, setCurrentUserData, setTable } from '../appActions';
-
 import styles from './Login.less';
 
-const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTable }) => {
+const Login = ({ tableId, setCurrentUserData, usersUpdated, tableUpdated, setTable }) => {
     const [formState, updateForm] = useState({
         loginName: '',
         loginError: null
@@ -23,7 +22,6 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
         if (tableId) {
             listenerTableId = tableId;
         } else {
-            // TODO: try catch
             const newTableRef = db.ref('tables').push();
             const tableData = {
                 table: {
@@ -49,28 +47,22 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
 
         // USER CHANGES LISTENER
         db.ref(`tables/${listenerTableId}/users`).on('value', snapshot => {
-            // const users = Object.entries(snapshot.val() || {aksjhdkfh: {name: 'shane'}}).map(([key, value]) => {
             const users = Object.entries(snapshot.val() || {}).map(([key, value]) => {
                 return {
                     id: key,
                     ...value
                 };
             });
-            // console.log('users: ', users);
             usersUpdated({users});
         });
 
         // ADD USER and SET CURRENT DATA
-        // console.log(`share url: ${document.location.origin}?t=${newTableId}`);
-        // TODO: try catch
         let userData = {
             name: formState.loginName,
             moderator: Boolean(!tableId)
         };
 
-        var usersRef = db.ref(`tables/${listenerTableId}/users`);
-
-        var newUserRef = usersRef.push();
+        var newUserRef = db.ref(`tables/${listenerTableId}/users`).push();
         userData = {
             userId: newUserRef.key,
             ...userData
@@ -91,13 +83,10 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
     return (
         <div>
             <form className={styles.form} onSubmit={handleSubmit}>
-                <div className={styles['form-item']}>
-                    {/* <label htmlFor="loginName">
-                        Name:
-                    </label> */}
+                <div className={"form-item"}>
                     <input
                         id="loginName"
-                        className={styles['form-input']}
+                        className={"form-input"}
                         autoFocus
                         type="text"
                         placeholder="Your name here"
@@ -106,12 +95,12 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
                         maxLength="20"
                     />
                 </div>
-                <div className={styles['form-item']}>
-                    <button type="submit">
+                <div className={"form-item"}>
+                    <button className="button" type="submit">
                         {tableId ? 'Join' : 'Create'} Table
                     </button>
                 </div>
-                <div className={styles['form-item']}>
+                <div className={"form-item"}>
                     {formState.loginError ?
                         <span className={styles.red}>
                             {formState.loginError}
@@ -121,35 +110,26 @@ const Login = ({tableId, setCurrentUserData, usersUpdated, tableUpdated, setTabl
                     }
                 </div>
                 {!tableId ?
-                    <div className={styles['form-item']}>
+                    <div className={"form-item"}>
                         You will be the moderator
                     </div>
                     :
                     null
                 }
-                {/* {props.loginError ?
-                    <span className={styles.red}>
-                        {props.loginError}
-                    </span>
-                    :
-                    null
-                } */}
             </form>
         </div>
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        tableId: state.table.tableId
-    };
-};
+const mapStateToProps = state => ({
+    tableId: state.table.tableId,
+});
 
 const mapDispatchToProps = {
     setCurrentUserData,
     usersUpdated,
     tableUpdated,
-    setTable
+    setTable,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

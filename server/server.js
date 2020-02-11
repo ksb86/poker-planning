@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const fs = require('fs');
 const path = require('path');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
