@@ -1,11 +1,13 @@
+@import '../styles/variables.less';
+
 .card {
     position: relative;
     cursor: pointer;
     margin: 20px;
     height: 160px;
     width: 120px;
-    border: 1px solid #bbb;
-    background: #ddd;
+    border: 1px solid @grey-border-1;
+    background: @grey-bg-1;
     border-radius: 3px;
     display: flex;
     align-items: center;
@@ -21,8 +23,8 @@
     }
 }
 .selected {
-    border: 1px solid #666;
-    background: #aaa;
+    border: 1px solid @grey-border-2;
+    background: @grey-bg-2;
 }
 .tl {
     position: absolute;

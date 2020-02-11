@@ -14,10 +14,8 @@ const Main = ({ tableVoting }) => {
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        tableVoting: state.table.tableVoting
-    };
-};
+const mapStateToProps = state => ({
+    tableVoting: state.table.tableVoting,
+});
 
 export default connect(mapStateToProps, null)(Main);

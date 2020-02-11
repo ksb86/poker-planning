@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import cx from 'classnames';
 import { connect } from 'react-redux';
 import useInterval from '@use-it/interval';
 import config from '../../config';
 import Card from '../shared/card';
 import styles from './Cards.less';
 
-const Cards = ({userId, tableId, easter}) => {
+const Cards = ({ userId, tableId, easter }) => {
     const [voteState, updateVoteState] = useState('');
     const [cards, setCards] = useState(config.pointOptions);
     const [lucky, setLucky] = useState(false);
@@ -43,7 +44,7 @@ const Cards = ({userId, tableId, easter}) => {
         <div className={styles.cards}>
             {easter &&
                 <div>
-                    <button id="imFeelingLucky" className={styles.luckyBtn} onMouseDown={handleLuckyClick}>I'm Feeling Lucky</button>
+                    <button id="imFeelingLucky" className={cx('button', styles.luckyBtn)} onMouseDown={handleLuckyClick}>I'm Feeling Lucky</button>
                 </div>
             }
             <div className={styles.cardsInner}>
@@ -64,12 +65,10 @@ const Cards = ({userId, tableId, easter}) => {
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        userId: state.currentUser.userId,
-        tableId: state.table.tableId,
-        easter: state.table.easter,
-    };
-};
+const mapStateToProps = state => ({
+    userId: state.currentUser.userId,
+    tableId: state.table.tableId,
+    easter: state.table.easter,
+});
 
 export default connect(mapStateToProps, null)(Cards);

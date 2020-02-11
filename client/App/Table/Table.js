@@ -31,10 +31,8 @@ const Table = ({ easter }) => {
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        easter: state.table.easter,
-    };
-};
+const mapStateToProps = state => ({
+    easter: state.table.easter,
+});
 
 export default connect(mapStateToProps, null)(Table);

@@ -14,7 +14,6 @@ const store = createStore(reducers, composeWithDevTools(applyMiddleware(promise,
 
 new Konami(() => {
     store.dispatch(toggleEaster());
-    // alert('Exciting things to come!!!')
 });
 
 render(

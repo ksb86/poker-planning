@@ -5,24 +5,7 @@ import Indicator from '../shared/indicator';
 import X from '../shared/X';
 import styles from './Users.less';
 
-const Users = ({users, tableVoting, tableId, moderator, easter}) => {
-    // TEMP
-    // const clean = async () => {
-    //     const batch = db.batch();
-
-    //     const users = await db.collection('users').get();
-    //     const tables = await db.collection('tables').get();
-    //     [...users.docs, ...tables.docs].forEach(doc => {
-    //         batch.delete(doc.ref);
-    //     });
-
-    //     await batch.commit();
-    //     console.log('all users and tables deleted');
-    //     localStorage.removeItem('popl-user-id');
-    //     document.location.href = '/';
-    // };
-    // TEMP
-
+const Users = ({ users, tableVoting, tableId, moderator, easter }) => {
     const handleDelete = async user => {
         if (window.confirm(`Remove "${user.name}" from table?`)) {
             await window.db.ref(`tables/${tableId}/users/${user.id}`).remove();
@@ -57,14 +40,12 @@ const Users = ({users, tableVoting, tableId, moderator, easter}) => {
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        users: state.table.users || [],
-        tableVoting: state.table.tableVoting,
-        tableId: state.table.tableId,
-        moderator: state.currentUser.moderator,
-        easter: state.table.easter
-    };
-};
+const mapStateToProps = state => ({
+    users: state.table.users || [],
+    tableVoting: state.table.tableVoting,
+    tableId: state.table.tableId,
+    moderator: state.currentUser.moderator,
+    easter: state.table.easter,
+});
 
 export default connect(mapStateToProps, null)(Users);

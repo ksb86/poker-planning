@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import useInterval from '@use-it/interval';
 import styles from './Slots.less';
@@ -64,6 +64,7 @@ const Slots = ({ tableId, userId, userPoints }) => {
         setNumStopped(0);
         setScoredPoints(0);
     };
+
     return (
         <div className={styles.slots}>
             <div className={styles.slotsWrap}>
@@ -80,25 +81,23 @@ const Slots = ({ tableId, userId, userPoints }) => {
             <div className={styles.slotsControls}>
                 {stopped1 && stopped2 && stopped3 ?
                     <>
-                        <button onClick={reset}>play again!</button>
+                        <button className="button" onClick={reset}>play again!</button>
                         <div className={styles.slotsPoints}>
                             {`${scoredPoints} points${scoredPoints !== 0 ? '!' : ''}`}
                         </div>
                     </>
                     :
-                    <button onClick={stop}>stop</button>
+                    <button className="button" onClick={stop}>stop</button>
                 }
             </div>
         </div>
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        tableId: state.table.tableId,
-        userId: state.currentUser.userId,
-        userPoints: state.currentUser.points || 0 // this is stale from page load.  get it realtime
-    };
-};
+const mapStateToProps = state => ({
+    tableId: state.table.tableId,
+    userId: state.currentUser.userId,
+    userPoints: state.currentUser.points || 0,
+});
 
 export default connect(mapStateToProps, null)(Slots);

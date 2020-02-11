@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Header from './Header/Header';
 import Login from './Login/Login';
 import Main from './Main/Main';
-import styles from './App.less';
+import './App.less';
 
 import {
     usersUpdated,
@@ -12,7 +12,7 @@ import {
     setTable
 } from './appActions';
 
-const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, setTable}) => {
+const App = ({ tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, setTable }) => {
     const [lsUserIdCopy, update] = useState(localStorage.getItem('popl-user-id'));
     useEffect(() => {
         (async function getUserIdFromLocalStorage() {
@@ -41,7 +41,6 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
 
                 // USER CHANGES LISTENER
                 db.ref(`tables/${tableIdParam}/users`).on('value', snapshot => {
-                    // const users = Object.entries(snapshot.val() || {aksjhdkfh: {name: 'shane'}}).map(([key, value]) => {
                     const users = Object.entries(snapshot.val() || {}).map(([key, value]) => {
                         return {
                             id: key,
@@ -54,10 +53,6 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
 
             const localStorageUserId = localStorage.getItem('popl-user-id');
             if (localStorageUserId) {
-                // TODO: try catch
-                // const currentUserRef = await db.collection('users').doc(localStorageUserId);
-                // const currentUser = await currentUserRef.get();
-
                 const currentUser = await new Promise((res, rej) => {
                     db.ref(`tables/${tableIdParam}/users/${localStorageUserId}`).once('value', snapshot => {
                         res(snapshot.val());
@@ -65,9 +60,6 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
                 });
 
                 if (currentUser) {
-                    // await currentUserRef.update({
-                    //     tableId: tableIdParam || null
-                    // });
                     setCurrentUserData({
                         tableId: tableIdParam || null,
                         userId: localStorageUserId,
@@ -96,19 +88,18 @@ const App = ({tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, s
     }
 
     return (
-        <div>
+        <>
             <Header />
             {tableId && <Main />}
-        </div>
+        </>
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        userId: state.currentUser.userId,
-        tableId: state.table.tableId
-    };
-};
+const mapStateToProps = state => ({
+    userId: state.currentUser.userId,
+    tableId: state.table.tableId,
+});
+
 const mapDispatchToProps = {
     usersUpdated,
     setCurrentUserData,

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux'
 import cx from 'classnames';
-import styles from './Header.less';
 import {
     removeUserData,
     updateCurrentUserName
 } from '../appActions';
+import styles from './Header.less';
 
 const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }) => {
     const [editModeOn, updateEditMode] = useState(false);
@@ -13,7 +13,6 @@ const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }
     const handleLogout = async e => {
         e.preventDefault();
 
-        // TODO: try catch
         await window.db.ref(`tables/${tableId}/users/${userId}`).remove();
         removeUserData();
         document.location.href = '/';
@@ -54,7 +53,7 @@ const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }
                         <form onSubmit={handleSaveNewName}>
                             <input
                                 id="updateName"
-                                className={cx(styles['form-input'], styles.editNameInput)}
+                                className={cx('form-input', styles.editNameInput)}
                                 type="text"
                                 placeholder="New name here"
                                 autoComplete="off"
@@ -64,15 +63,15 @@ const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }
                                 onChange={(e) => updateNewName(e.target.value)}
                                 onKeyUp={handleNewNameKeyUp}
                             />
-                            <button className={styles.saveNewNameBtn} disabled={!Boolean(newName?.trim().length)} type="submit">Save</button>
-                            <button className={styles.cancelNewNameBtn}  type="button" onClick={toggleEditMode}>Cancel</button>
+                            <button className={cx('button', styles.saveNewNameBtn)} type="submit" disabled={!Boolean(newName?.trim().length)}>Save</button>
+                            <button className={cx('button', styles.cancelNewNameBtn)} type="button" onClick={toggleEditMode}>Cancel</button>
                         </form>
                         :
                         <span className={styles.userName} onClick={toggleEditMode}>
                             {name}
                         </span>
                     }
-                    <button className={styles.leaveBtn} type="button" onClick={handleLogout}>leave</button>
+                    <button className={cx('button', styles.leaveBtn)} type="button" onClick={handleLogout}>leave</button>
                 </div>
             </header>
         </div>
@@ -80,17 +79,15 @@ const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }
 };
 
 
-const mapStateToProps = state => {
-    return {
-        userId: state.currentUser.userId,
-        name: state.currentUser.name,
-        tableId: state.table.tableId,
-    };
-};
+const mapStateToProps = state => ({
+    userId: state.currentUser.userId,
+    name: state.currentUser.name,
+    tableId: state.table.tableId,
+});
 
 const mapDispatchToProps = {
     removeUserData,
-    updateCurrentUserName
+    updateCurrentUserName,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
