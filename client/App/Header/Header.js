@@ -71,7 +71,7 @@ const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }
                             {name}
                         </span>
                     }
-                    <button className={cx('button', styles.leaveBtn)} type="button" onClick={handleLogout}>leave</button>
+                    <button className={cx('button', styles.leaveBtn)} type="button" onClick={handleLogout}>Leave</button>
                 </div>
             </header>
         </div>

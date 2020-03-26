@@ -4,7 +4,8 @@ const initialState = {
     tableId: null,
     tableVoting: true,
     users: [],
-    easter: false
+    easter: false,
+    editingModerator: false,
 };
 
 export default (state = initialState, action) => {
@@ -41,6 +42,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 easter: !state.easter
+            };
+        }
+
+        case actionTypes.SET_EDITING_MODERATOR: {
+            return {
+                ...state,
+                editingModerator: action.payload,
             };
         }
 

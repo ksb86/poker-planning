@@ -5,7 +5,8 @@ export const actionTypes = {
     TABLE_UPDATED: 'TABLE_UPDATED',
     SET_TABLE: 'SET_TABLE',
     UPDATE_CURRENT_USER_NAME: 'UPDATE_CURRENT_USER_NAME',
-    TOGGLE_EASTER: 'TOGGLE_EASTER'
+    TOGGLE_EASTER: 'TOGGLE_EASTER',
+    SET_EDITING_MODERATOR: 'SET_EDITING_MODERATOR',
 };
 
 export const usersUpdated = payload => {
@@ -51,5 +52,12 @@ export const setTable = payload => {
 export const toggleEaster = () => {
     return {
         type: actionTypes.TOGGLE_EASTER
-    }
-}
+    };
+};
+
+export const setEditingModerator = payload => {
+    return {
+        type: actionTypes.SET_EDITING_MODERATOR,
+        payload
+    };
+};
