@@ -2,19 +2,18 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux'
 import cx from 'classnames';
 import {
-    removeUserData,
     updateCurrentUserName
 } from '../appActions';
 import styles from './Header.less';
 
-const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }) => {
+const Header = ({ userId, tableId, name, updateCurrentUserName }) => {
     const [editModeOn, updateEditMode] = useState(false);
     const [newName, updateNewName] = useState(name);
     const handleLogout = async e => {
         e.preventDefault();
 
         await window.db.ref(`tables/${tableId}/users/${userId}`).remove();
-        removeUserData();
+        localStorage.removeItem('popl-user-id');
         document.location.href = '/';
     };
 
@@ -86,7 +85,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    removeUserData,
     updateCurrentUserName,
 };
 

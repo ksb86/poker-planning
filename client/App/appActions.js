@@ -1,5 +1,4 @@
 export const actionTypes = {
-    REMOVE_USER_DATA: 'REMOVE_USER_DATA',
     USERS_UPDATED: 'USERS_UPDATED',
     SET_USER_DATA: 'SET_USER_DATA',
     TABLE_UPDATED: 'TABLE_UPDATED',
@@ -7,6 +6,8 @@ export const actionTypes = {
     UPDATE_CURRENT_USER_NAME: 'UPDATE_CURRENT_USER_NAME',
     TOGGLE_EASTER: 'TOGGLE_EASTER',
     SET_EDITING_MODERATOR: 'SET_EDITING_MODERATOR',
+    SET_USER_ID: 'SET_USER_ID',
+    SET_TABLE_ID: 'SET_TABLE_ID',
 };
 
 export const usersUpdated = payload => {
@@ -29,22 +30,9 @@ export const updateCurrentUserName = payload => {
     };
 };
 
-export const removeUserData = () => {
-    return {
-        type: actionTypes.REMOVE_USER_DATA
-    };
-};
-
 export const tableUpdated = payload => {
     return {
         type: actionTypes.TABLE_UPDATED,
-        payload
-    };
-};
-
-export const setTable = payload => {
-    return {
-        type: actionTypes.SET_TABLE,
         payload
     };
 };
@@ -59,5 +47,19 @@ export const setEditingModerator = payload => {
     return {
         type: actionTypes.SET_EDITING_MODERATOR,
         payload
+    };
+};
+export const setUserId = userId => {
+    localStorage.setItem('popl-user-id', userId);
+
+    return {
+        type: actionTypes.SET_USER_ID,
+        userId,
+    };
+};
+export const setTableId = tableId => {
+    return {
+        type: actionTypes.SET_TABLE_ID,
+        tableId,
     };
 };

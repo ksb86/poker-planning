@@ -27,6 +27,12 @@ const Controls = ({ tableId, tableVoting, editingModerator, setEditingModerator 
                 <button className="button" type="button" onClick={toggleVotingStatus}>{tableVoting ? 'Stop Voting' : 'New Round'}</button>
             }
 
+            {editingModerator &&
+                <div className={styles.changeModeratorMessage}>
+                    Select the new moderator above ☝️
+                </div>
+            }
+
             <div className={styles.changeModerator} onClick={toggleChangeModerator}>
                 {editingModerator ? 'Cancel' : 'Change Moderator'}
             </div>

@@ -10,14 +10,14 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.USERS_UPDATED: {
-            const userId = localStorage.getItem('popl-user-id');
-            if (userId && !action.payload.users.some(user => user.id === userId)) {
-                // user was removed from table
-                localStorage.removeItem('popl-user-id');
-                document.location.href = '/';
-            }
+        case actionTypes.SET_TABLE_ID: {
+            return {
+                ...state,
+                tableId: action.tableId,
+            };
+        }
 
+        case actionTypes.USERS_UPDATED: {
             return {
                 ...state,
                 users: action.payload.users

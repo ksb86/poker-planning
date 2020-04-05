@@ -7,7 +7,7 @@ import promise from 'redux-promise-middleware';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import Konami from 'konami';
 import reducers from './reducers';
-import { toggleEaster } from './App/appActions';
+import { toggleEaster, setUserId, setTableId } from './App/appActions';
 import App from './App/App';
 
 const store = createStore(reducers, composeWithDevTools(applyMiddleware(promise, thunk)));
@@ -15,6 +15,15 @@ const store = createStore(reducers, composeWithDevTools(applyMiddleware(promise,
 new Konami(() => {
     store.dispatch(toggleEaster());
 });
+const initialUserId = localStorage.getItem('popl-user-id');
+const initialTableId = location?.search?.split('?')[1]?.split('&')?.find(item => {
+    if (item.includes('t=')) {
+        return true;
+    }
+})?.split('=')[1];
+
+initialUserId && store.dispatch(setUserId(initialUserId));
+initialTableId && store.dispatch(setTableId(initialTableId));
 
 render(
     <Provider store={store}>

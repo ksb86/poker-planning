@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
+import { setEditingModerator } from '../appActions';
 import Controls from '../Controls/Controls';
 import Indicator from '../shared/indicator';
 import X from '../shared/X';
 import styles from './Users.less';
 
-const Users = ({ users, tableVoting, tableId, moderator, easter, editingModerator }) => {
+const Users = ({ users, tableVoting, tableId, moderator, easter, editingModerator, setEditingModerator }) => {
     const [toolTip, setToolTip] = useState({show: false});
 
     const ttEscapeFn = useCallback(event => {
@@ -17,7 +18,6 @@ const Users = ({ users, tableVoting, tableId, moderator, easter, editingModerato
 
     const ttClickFn = useCallback(event => {
         if (toolTip.show && !event.target.closest('.tool-tip')) {
-            console.log('close here');
             setToolTip({show: false});
         }
     }, [toolTip]);
@@ -34,23 +34,20 @@ const Users = ({ users, tableVoting, tableId, moderator, easter, editingModerato
 
     const handleDelete = async user => {
         if (window.confirm(`Remove "${user.name}" from table?`)) {
-            await window.db.ref(`tables/${tableId}/users/${user.id}`).remove();
+            await window.db.ref(`tables/${tableId}/users/${user.userId}`).remove();
         }
     };
 
-    const handleSelectModerator = (e, {id, name}) => {
+    const handleSelectModerator = (e, {userId, name}) => {
         setToolTip({
             show: true,
             x: e.pageX,
             y: e.pageY,
             name,
-            userId: id,
+            userId,
         });
     };
     const handleAssignModerator = () => {
-
-        // db.ref(`tables/${tableId}/table/`).update({ tableVoting: !tableVoting });
-
         db.ref(`tables/${tableId}/users/`).transaction(function(users) {
             let users2;
             users2 = Object.entries(users).reduce((acc, [key, user]) => {
@@ -62,9 +59,9 @@ const Users = ({ users, tableVoting, tableId, moderator, easter, editingModerato
                 acc[key] = user;
                 return acc;
             }, {});
-            console.log('users2: ', users2);
             return users2;
         });
+        setEditingModerator(false);
         setToolTip({
             show: false
         });
@@ -84,9 +81,14 @@ const Users = ({ users, tableVoting, tableId, moderator, easter, editingModerato
             <ul className={styles.users}>
                 {users.map(user => {
                     return (
-                        <li className={cx(styles.user, editingModerator ? styles.editing : '')} key={user.id}>
+                        <li className={cx(
+                                styles.user,
+                                {[styles.editing]: (editingModerator && !user.moderator)},
+                                {[styles.unselectableUser]: editingModerator && user.moderator})
+                            }
+                            key={user.userId}>
                             <span>
-                                <span className={styles.userName} onClick={e => moderator && editingModerator ? handleSelectModerator(e, user) : () => {}}>
+                                <span className={styles.userName} onClick={e => (moderator && editingModerator && !user.moderator) ? handleSelectModerator(e, user) : () => {}}>
                                     {user.name}
                                 </span>
                                 {easter && <span className={styles.points}>{user.points || '0'} pts</span>}
@@ -124,4 +126,8 @@ const mapStateToProps = state => ({
     editingModerator: state.table.editingModerator,
 });
 
-export default connect(mapStateToProps, null)(Users);
+const mapDispatchToProps = {
+    setEditingModerator
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Users);
