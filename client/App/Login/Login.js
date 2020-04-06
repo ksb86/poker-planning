@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { usersUpdated, tableUpdated, setTableId, setUserId } from '../appActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTableId, setUserId } from '../appActions';
 import styles from './Login.less';
 
-const Login = ({ tableId, setUserId, setTableId }) => {
+const Login = () => {
+    const dispatch = useDispatch();
+    const { tableId } = useSelector(state => state.table);
+
     const [formState, updateForm] = useState({
         loginName: '',
         loginError: null
@@ -33,7 +36,7 @@ const Login = ({ tableId, setUserId, setTableId }) => {
             history.pushState(null, null, `?t=${listenerTableId}`);
 
 
-            setTableId(listenerTableId);
+            dispatch(setTableId(listenerTableId));
         }
 
         // ADD USER and SET CURRENT DATA
@@ -48,7 +51,7 @@ const Login = ({ tableId, setUserId, setTableId }) => {
             ...userData
         }
         newUserRef.set(userData);
-        setUserId(userData.userId);
+        dispatch(setUserId(userData.userId));
     };
 
     const handleInputChange = e => {
@@ -100,15 +103,4 @@ const Login = ({ tableId, setUserId, setTableId }) => {
     );
 };
 
-const mapStateToProps = state => ({
-    tableId: state.table.tableId,
-});
-
-const mapDispatchToProps = {
-    setUserId,
-    usersUpdated,
-    tableUpdated,
-    setTableId,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

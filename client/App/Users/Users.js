@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { setEditingModerator } from '../appActions';
 import Controls from '../Controls/Controls';
@@ -7,7 +7,17 @@ import Indicator from '../shared/indicator';
 import X from '../shared/X';
 import styles from './Users.less';
 
-const Users = ({ users, tableVoting, tableId, moderator, easter, editingModerator, setEditingModerator }) => {
+const Users = () => {
+    const dispatch = useDispatch();
+    const { moderator } = useSelector(state => state.currentUser);
+    const {
+        easter,
+        editingModerator,
+        tableId,
+        tableVoting,
+        users,
+     } = useSelector(state => state.table);
+
     const [toolTip, setToolTip] = useState({show: false});
 
     const ttEscapeFn = useCallback(event => {
@@ -61,7 +71,7 @@ const Users = ({ users, tableVoting, tableId, moderator, easter, editingModerato
             }, {});
             return users2;
         });
-        setEditingModerator(false);
+        dispatch(setEditingModerator(false));
         setToolTip({
             show: false
         });
@@ -117,17 +127,4 @@ const Users = ({ users, tableVoting, tableId, moderator, easter, editingModerato
     );
 };
 
-const mapStateToProps = state => ({
-    users: state.table.users || [],
-    tableVoting: state.table.tableVoting,
-    tableId: state.table.tableId,
-    moderator: state.currentUser.moderator,
-    easter: state.table.easter,
-    editingModerator: state.table.editingModerator,
-});
-
-const mapDispatchToProps = {
-    setEditingModerator
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Users);
+export default Users;

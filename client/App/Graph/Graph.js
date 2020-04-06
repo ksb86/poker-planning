@@ -1,10 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Doughnut } from 'react-chartjs-2';
 import config from '../../config';
 import styles from './Graph.less';
 
-const Graph = ({ users }) => {
+const Graph = () => {
+    const { users } = useSelector(state => state.table);
+
     if (!users.some(user => Boolean(user.currentVote))) {
         // no one voted
         return <p className={styles.noVotes}>No votes were recorded, click 'New Round' to try again!</p>;
@@ -50,8 +52,4 @@ const Graph = ({ users }) => {
     );
 };
 
-const mapStateToProps = state => ({
-    users: state.table.users,
-});
-
-export default connect(mapStateToProps, null)(Graph);
+export default Graph;

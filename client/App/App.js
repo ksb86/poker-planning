@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from './Header/Header';
 import Login from './Login/Login';
 import Main from './Main/Main';
@@ -11,14 +11,18 @@ import {
     tableUpdated,
 } from './appActions';
 
-const App = ({ tableId, userId, usersUpdated, setCurrentUserData, tableUpdated }) => {
+const App = () => {
+    const dispatch = useDispatch();
+    const { userId } = useSelector(state => state.currentUser);
+    const { tableId } = useSelector(state => state.table);
+
     useEffect(() => {
         if (tableId) {
             // CHANGE LISTENER FOR TABLE
             db.ref(`tables/${tableId}/table`).on('value', snapshot => {
-                tableUpdated({
+                dispatch(tableUpdated({
                     ...snapshot.val()
-                });
+                }));
             });
 
             // CHANGE LISTENER FOR ALL USERS
@@ -29,7 +33,7 @@ const App = ({ tableId, userId, usersUpdated, setCurrentUserData, tableUpdated }
                         ...value
                     };
                 });
-                usersUpdated({users});
+                dispatch(usersUpdated({users}));
             });
         }
     }, [tableId]);
@@ -40,9 +44,9 @@ const App = ({ tableId, userId, usersUpdated, setCurrentUserData, tableUpdated }
             db.ref(`tables/${tableId}/users/${userId}`).on('value', snapshot => {
                 const currentUser = snapshot.val();
                 if (currentUser) {
-                    setCurrentUserData({
+                    dispatch(setCurrentUserData({
                         ...currentUser
-                    });
+                    }));
                 }
             });
         }
@@ -60,14 +64,4 @@ const App = ({ tableId, userId, usersUpdated, setCurrentUserData, tableUpdated }
     );
 };
 
-const mapStateToProps = state => ({
-    userId: state.currentUser.userId,
-    tableId: state.table.tableId,
-});
-
-const mapDispatchToProps = {
-    usersUpdated,
-    setCurrentUserData,
-    tableUpdated,
-};
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

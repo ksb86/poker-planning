@@ -1,9 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styles from './Controls.less';
 import { setEditingModerator } from '../appActions';
 
-const Controls = ({ tableId, tableVoting, editingModerator, setEditingModerator }) => {
+const Controls = () => {
+    const dispatch = useDispatch();
+    const {
+        tableVoting,
+        tableId,
+        editingModerator
+    } = useSelector(state => state.table);
+
     const toggleVotingStatus = async () => {
         db.ref(`tables/${tableId}/table/`).update({ tableVoting: !tableVoting });
 
@@ -18,7 +25,7 @@ const Controls = ({ tableId, tableVoting, editingModerator, setEditingModerator 
         }
     };
      const toggleChangeModerator = () => {
-        setEditingModerator(!editingModerator);
+        dispatch(setEditingModerator(!editingModerator));
      };
 
     return (
@@ -40,14 +47,4 @@ const Controls = ({ tableId, tableVoting, editingModerator, setEditingModerator 
     );
 };
 
-const mapStateToProps = state => ({
-    tableVoting: state.table.tableVoting,
-    tableId: state.table.tableId,
-    editingModerator: state.table.editingModerator,
-});
-
-const mapDispatchToProps = {
-    setEditingModerator,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Controls);
+export default Controls;
