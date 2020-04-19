@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames';
 import {
-    removeUserData,
     updateCurrentUserName
 } from '../appActions';
 import styles from './Header.less';
 
-const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }) => {
+const Header = () => {
+    const dispatch = useDispatch();
+    const {
+        userId,
+        name
+     } = useSelector(state => state.currentUser);
+    const { tableId } = useSelector(state => state.table);
+
     const [editModeOn, updateEditMode] = useState(false);
     const [newName, updateNewName] = useState(name);
     const handleLogout = async e => {
         e.preventDefault();
 
         await window.db.ref(`tables/${tableId}/users/${userId}`).remove();
-        removeUserData();
+        localStorage.removeItem('popl-user-id');
         document.location.href = '/';
     };
 
@@ -29,7 +35,7 @@ const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }
             db.ref(`tables/${tableId}/users/${userId}`).update({
                 name: nameToSave
             });
-            updateCurrentUserName(nameToSave);
+            dispatch(updateCurrentUserName(nameToSave));
             toggleEditMode()
         } else {
             document.getElementById('updateName').focus();
@@ -71,23 +77,11 @@ const Header = ({ userId, tableId, name, removeUserData, updateCurrentUserName }
                             {name}
                         </span>
                     }
-                    <button className={cx('button', styles.leaveBtn)} type="button" onClick={handleLogout}>leave</button>
+                    <button className={cx('button', styles.leaveBtn)} type="button" onClick={handleLogout}>Leave</button>
                 </div>
             </header>
         </div>
     );
 };
 
-
-const mapStateToProps = state => ({
-    userId: state.currentUser.userId,
-    name: state.currentUser.name,
-    tableId: state.table.tableId,
-});
-
-const mapDispatchToProps = {
-    removeUserData,
-    updateCurrentUserName,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default Header;

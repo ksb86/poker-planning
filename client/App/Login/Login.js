@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { usersUpdated, tableUpdated, setCurrentUserData, setTable } from '../appActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTableId, setUserId } from '../appActions';
 import styles from './Login.less';
 
-const Login = ({ tableId, setCurrentUserData, usersUpdated, tableUpdated, setTable }) => {
+const Login = () => {
+    const dispatch = useDispatch();
+    const { tableId } = useSelector(state => state.table);
+
     const [formState, updateForm] = useState({
         loginName: '',
         loginError: null
@@ -18,10 +21,9 @@ const Login = ({ tableId, setCurrentUserData, usersUpdated, tableUpdated, setTab
             });
             return;
         }
-        let listenerTableId;
-        if (tableId) {
-            listenerTableId = tableId;
-        } else {
+        let listenerTableId = tableId;
+        if (!tableId) {
+            // CREATE NEW TABLE
             const newTableRef = db.ref('tables').push();
             const tableData = {
                 table: {
@@ -32,29 +34,10 @@ const Login = ({ tableId, setCurrentUserData, usersUpdated, tableUpdated, setTab
             newTableRef.set(tableData);
             listenerTableId = newTableRef.key;
             history.pushState(null, null, `?t=${listenerTableId}`);
+
+
+            dispatch(setTableId(listenerTableId));
         }
-
-        setTable({
-            tableId: listenerTableId
-        });
-
-        // TABLE CHANGES LISTENER
-        db.ref(`tables/${listenerTableId}/table`).on('value', snapshot => {
-            tableUpdated({
-                ...snapshot.val()
-            });
-        });
-
-        // USER CHANGES LISTENER
-        db.ref(`tables/${listenerTableId}/users`).on('value', snapshot => {
-            const users = Object.entries(snapshot.val() || {}).map(([key, value]) => {
-                return {
-                    id: key,
-                    ...value
-                };
-            });
-            usersUpdated({users});
-        });
 
         // ADD USER and SET CURRENT DATA
         let userData = {
@@ -68,8 +51,7 @@ const Login = ({ tableId, setCurrentUserData, usersUpdated, tableUpdated, setTab
             ...userData
         }
         newUserRef.set(userData);
-
-        setCurrentUserData(userData);
+        dispatch(setUserId(userData.userId));
     };
 
     const handleInputChange = e => {
@@ -121,15 +103,4 @@ const Login = ({ tableId, setCurrentUserData, usersUpdated, tableUpdated, setTab
     );
 };
 
-const mapStateToProps = state => ({
-    tableId: state.table.tableId,
-});
-
-const mapDispatchToProps = {
-    setCurrentUserData,
-    usersUpdated,
-    tableUpdated,
-    setTable,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

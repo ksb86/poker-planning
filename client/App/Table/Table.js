@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Slots from '../Games/Slots';
 import Cards from '../Cards/Cards';
 import styles from './Table.less';
 
-const Table = ({ easter }) => {
+const Table = () => {
+    const { easter } = useSelector(state => state.table);
     const [tab, setTab] = useState('cards');
 
     return (
@@ -31,8 +32,4 @@ const Table = ({ easter }) => {
     );
 };
 
-const mapStateToProps = state => ({
-    easter: state.table.easter,
-});
-
-export default connect(mapStateToProps, null)(Table);
+export default Table;

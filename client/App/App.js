@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from './Header/Header';
 import Login from './Login/Login';
 import Main from './Main/Main';
@@ -9,81 +9,50 @@ import {
     usersUpdated,
     setCurrentUserData,
     tableUpdated,
-    setTable
 } from './appActions';
 
-const App = ({ tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, setTable }) => {
-    const [lsUserIdCopy, update] = useState(localStorage.getItem('popl-user-id'));
+const App = () => {
+    const dispatch = useDispatch();
+    const { userId } = useSelector(state => state.currentUser);
+    const { tableId } = useSelector(state => state.table);
+
     useEffect(() => {
-        (async function getUserIdFromLocalStorage() {
-            let tableIdParam;
-            try {
-                tableIdParam = location?.search?.split('?')[1].split('&')?.find(item => {
-                if (item.includes('t=')) {
-                    return true;
-                }
-                })?.split('=')[1];
-            } catch (error) {
-                console.log('No table id in url');
-            }
+        if (tableId) {
+            // CHANGE LISTENER FOR TABLE
+            db.ref(`tables/${tableId}/table`).on('value', snapshot => {
+                dispatch(tableUpdated({
+                    ...snapshot.val()
+                }));
+            });
 
-            if (tableIdParam) {
-                setTable({
-                    tableId: tableIdParam
+            // CHANGE LISTENER FOR ALL USERS
+            db.ref(`tables/${tableId}/users`).on('value', snapshot => {
+                const users = Object.entries(snapshot.val() || {}).map(([key, value]) => {
+                    return {
+                        id: key,
+                        ...value
+                    };
                 });
+                dispatch(usersUpdated({users}));
+            });
+        }
+    }, [tableId]);
 
-                // TABLE CHANGES LISTENER
-                db.ref(`tables/${tableIdParam}/table`).on('value', snapshot => {
-                    tableUpdated({
-                        ...snapshot.val()
-                    });
-                });
-
-                // USER CHANGES LISTENER
-                db.ref(`tables/${tableIdParam}/users`).on('value', snapshot => {
-                    const users = Object.entries(snapshot.val() || {}).map(([key, value]) => {
-                        return {
-                            id: key,
-                            ...value
-                        };
-                    });
-                    usersUpdated({users});
-                });
-            }
-
-            const localStorageUserId = localStorage.getItem('popl-user-id');
-            if (localStorageUserId) {
-                const currentUser = await new Promise((res, rej) => {
-                    db.ref(`tables/${tableIdParam}/users/${localStorageUserId}`).once('value', snapshot => {
-                        res(snapshot.val());
-                    });
-                });
-
+    useEffect(() => {
+        if (tableId && userId) {
+            // CHANGE LISTENER FOR THIS USER
+            db.ref(`tables/${tableId}/users/${userId}`).on('value', snapshot => {
+                const currentUser = snapshot.val();
                 if (currentUser) {
-                    setCurrentUserData({
-                        tableId: tableIdParam || null,
-                        userId: localStorageUserId,
-                        name: currentUser.name,
-                        moderator: currentUser.moderator,
-                        points: currentUser.points
-                    });
-                } else {
-                    console.log(`No user found with id ${localStorageUserId}`);
-                    localStorage.removeItem('popl-user-id');
-                    let tParam = '';
-                    if (tableIdParam) {
-                        tParam = `?t=${tableIdParam}`;
-                    }
-                    document.location.href = `/${tParam}`;
+                    dispatch(setCurrentUserData({
+                        ...currentUser
+                    }));
                 }
-            }
-        })();
-    }, []); // no params - run once on first render
+            });
+        }
+    }, [tableId, userId]);
 
-    if (lsUserIdCopy && !userId) {
-        return 'loading...';
-    }
-    if (!userId) {
+    if (!userId || userId && !tableId) {
         return <Login />;
     }
 
@@ -95,15 +64,4 @@ const App = ({ tableId, userId, usersUpdated, setCurrentUserData, tableUpdated, 
     );
 };
 
-const mapStateToProps = state => ({
-    userId: state.currentUser.userId,
-    tableId: state.table.tableId,
-});
-
-const mapDispatchToProps = {
-    usersUpdated,
-    setCurrentUserData,
-    tableUpdated,
-    setTable
-};
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
