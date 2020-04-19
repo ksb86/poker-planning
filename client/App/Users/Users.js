@@ -96,9 +96,10 @@ const Users = () => {
                                 {[styles.editing]: (editingModerator && !user.moderator)},
                                 {[styles.unselectableUser]: editingModerator && user.moderator})
                             }
-                            key={user.userId}>
+                            key={user.userId}
+                            onClick={e => (moderator && editingModerator && !user.moderator) ? handleSelectModerator(e, user) : () => {}}>
                             <span>
-                                <span className={styles.userName} onClick={e => (moderator && editingModerator && !user.moderator) ? handleSelectModerator(e, user) : () => {}}>
+                                <span className={styles.userName}>
                                     {user.name}
                                 </span>
                                 {easter && <span className={styles.points}>{user.points || '0'} pts</span>}
