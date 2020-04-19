@@ -1,8 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styles from './Controls.less';
+import { setEditingModerator } from '../appActions';
 
-const Controls = ({ tableId, tableVoting }) => {
+const Controls = () => {
+    const dispatch = useDispatch();
+    const {
+        tableVoting,
+        tableId,
+        editingModerator
+    } = useSelector(state => state.table);
+
     const toggleVotingStatus = async () => {
         db.ref(`tables/${tableId}/table/`).update({ tableVoting: !tableVoting });
 
@@ -16,17 +24,27 @@ const Controls = ({ tableId, tableVoting }) => {
             });
         }
     };
+     const toggleChangeModerator = () => {
+        dispatch(setEditingModerator(!editingModerator));
+     };
 
     return (
         <div className={styles.controls}>
-            <button className="button" type="button" onClick={toggleVotingStatus}>{tableVoting ? 'Stop Voting' : 'New Round'}</button>
+            {!editingModerator &&
+                <button className="button" type="button" onClick={toggleVotingStatus}>{tableVoting ? 'Stop Voting' : 'New Round'}</button>
+            }
+
+            {editingModerator &&
+                <div className={styles.changeModeratorMessage}>
+                    Select the new moderator above ☝️
+                </div>
+            }
+
+            <div className={styles.changeModerator} onClick={toggleChangeModerator}>
+                {editingModerator ? 'Cancel' : 'Change Moderator'}
+            </div>
         </div>
     );
 };
 
-const mapStateToProps = state => ({
-    tableVoting: state.table.tableVoting,
-    tableId: state.table.tableId,
-});
-
-export default connect(mapStateToProps, null)(Controls);
+export default Controls;

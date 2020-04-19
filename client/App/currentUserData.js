@@ -10,12 +10,14 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case actionTypes.SET_USER_ID: {
+            return {
+                ...state,
+                userId: action.userId,
+            };
+        }
+
         case actionTypes.SET_USER_DATA: {
-
-            if(!localStorage.getItem('popl-user-id')) {
-                localStorage.setItem('popl-user-id', action.payload.userId);
-            }
-
             return {
                 ...state,
                 ...action.payload
@@ -29,26 +31,14 @@ export default (state = initialState, action) => {
             };
         }
 
-        case actionTypes.REMOVE_USER_DATA: {
-            localStorage.removeItem('popl-user-id');
-
-            return initialState;
-        }
-
         case actionTypes.USERS_UPDATED: {
-            if (state.userId) {
-                const currentUser = action.payload.users.find(user => user.id === state.userId);
-                if (currentUser) {
-                    return {
-                        ...state,
-                        points: currentUser.points,
-                    };
-                }
-
-                return state;
+            if (state.userId && !action.payload.users.some(user => user.userId === state.userId)) {
+                // user was removed from table
+                localStorage.removeItem('popl-user-id');
+                document.location.href = '/';
             }
 
-            return state;
+            return { ...state };
         }
 
         default: {

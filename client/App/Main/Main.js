@@ -1,11 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Users from '../Users/Users';
 import Table from '../Table/Table';
 import Graph from '../Graph/Graph';
 import styles from './Main.less';
 
-const Main = ({ tableVoting }) => {
+const Main = () => {
+    const { tableVoting } = useSelector(state => state.table);
+
     return (
         <div className={styles.table}>
             <Users />
@@ -14,8 +16,4 @@ const Main = ({ tableVoting }) => {
     );
 };
 
-const mapStateToProps = state => ({
-    tableVoting: state.table.tableVoting,
-});
-
-export default connect(mapStateToProps, null)(Main);
+export default Main;

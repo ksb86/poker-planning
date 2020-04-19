@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import useInterval from '@use-it/interval';
 import styles from './Slots.less';
 
-const Slots = ({ tableId, userId, userPoints }) => {
+const Slots = () => {
+    const { tableId } = useSelector(state => state.table);
+    const {
+        userId,
+        points: userPoints = 0,
+    } = useSelector(state => state.currentUser);
+
     const [options, setOptions] = useState(['💰', '🌎', '🎹', '🎉', '😂', '💩', '👀', '🍔', '💾'])
 
     const [scoredPoints, setScoredPoints] = useState(0);
@@ -49,7 +55,7 @@ const Slots = ({ tableId, userId, userPoints }) => {
                 }
             }
             db.ref(`tables/${tableId}/users/${userId}`).update({
-                points: userPoints + score
+                points: (userPoints || 0) + score
             });
             setScoredPoints(score);
         }
@@ -94,10 +100,4 @@ const Slots = ({ tableId, userId, userPoints }) => {
     );
 };
 
-const mapStateToProps = state => ({
-    tableId: state.table.tableId,
-    userId: state.currentUser.userId,
-    userPoints: state.currentUser.points || 0,
-});
-
-export default connect(mapStateToProps, null)(Slots);
+export default Slots;

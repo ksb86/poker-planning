@@ -24,6 +24,31 @@
         }
     }
 }
+.editing {
+    color: @blue-link;
+    font-weight: bold;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+        letter-spacing: .5px;
+    }
+}
+.unselectableUser {
+   justify-content: center;
+   opacity: .5;
+   cursor: default;
+}
+.confirmModeratorToolTip {
+    position: absolute;
+    z-index: 2;
+    background: white;
+    border-radius: 3px;
+    padding: 15px;
+    box-shadow: 0px 3px 9px darkgrey;
+    max-width: 210px;
+}
 .indicators {
     display: flex;
     justify-content: center;

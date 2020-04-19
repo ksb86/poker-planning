@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import useInterval from '@use-it/interval';
 import config from '../../config';
 import Card from '../shared/card';
 import styles from './Cards.less';
 
-const Cards = ({ userId, tableId, easter }) => {
+const Cards = () => {
+    const { userId } = useSelector(state => state.currentUser);
+    const {
+        easter,
+        tableId,
+    } = useSelector(state => state.table);
+
     const [voteState, updateVoteState] = useState('');
     const [cards, setCards] = useState(config.pointOptions);
     const [lucky, setLucky] = useState(false);
@@ -65,10 +71,4 @@ const Cards = ({ userId, tableId, easter }) => {
     );
 };
 
-const mapStateToProps = state => ({
-    userId: state.currentUser.userId,
-    tableId: state.table.tableId,
-    easter: state.table.easter,
-});
-
-export default connect(mapStateToProps, null)(Cards);
+export default Cards;
