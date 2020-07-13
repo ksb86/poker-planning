@@ -14,7 +14,8 @@ const Login = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        if (!formState.loginName) {
+        const name = formState.loginName?.trim();
+        if (!name) {
             updateForm({
                 ...formState,
                 loginError: 'Please enter your name'
@@ -41,7 +42,7 @@ const Login = () => {
 
         // ADD USER and SET CURRENT DATA
         let userData = {
-            name: formState.loginName,
+            name,
             moderator: Boolean(!tableId)
         };
 
