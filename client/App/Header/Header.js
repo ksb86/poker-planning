@@ -62,7 +62,7 @@ const Header = () => {
                                 className={cx('form-input', styles.editNameInput)}
                                 type="text"
                                 placeholder="New name here"
-                                autoComplete="off"
+                                autoComplete="given_name"
                                 autoFocus
                                 maxLength="20"
                                 value={newName}
