@@ -73,7 +73,7 @@ const Login = () => {
                         autoFocus
                         type="text"
                         placeholder="Your name here"
-                        autoComplete="off"
+                        autoComplete="given_name"
                         onChange={handleInputChange}
                         maxLength="20"
                     />
