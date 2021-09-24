@@ -21,10 +21,10 @@
         cursor: pointer;
         border-bottom: 2px solid @blue-button-border;
 
-        &:hover {
+        &:hover:not([disabled]) {
             background: @blue-button-hover;
         }
-        &:active {
+        &:active:not([disabled]) {
             background: @blue-button-active;
         }
     }
