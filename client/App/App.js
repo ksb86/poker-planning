@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Header from './Header/Header';
 import Login from './Login/Login';
 import Main from './Main/Main';
+import Feedback from './Feedback/Feedback';
 import './App.less';
 
 import {
@@ -53,13 +54,19 @@ const App = () => {
     }, [tableId, userId]);
 
     if (!userId || userId && !tableId) {
-        return <Login />;
+        return (
+            <>
+                <Login />
+                <Feedback />
+            </>
+        );
     }
 
     return (
         <>
             <Header />
             {tableId && <Main />}
+            <Feedback />
         </>
     );
 };

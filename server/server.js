@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
-const pkg = require('../package.json');
+require('dotenv').config();
 
 const app = module.exports = express();
 app.use(compression());
@@ -21,10 +21,10 @@ app.use('/health', (req, res, next) => {
     next(req, res);
 });
 
-app.listen(pkg.port, () => {
+app.listen(process.env.PORT, () => {
     /* eslint-disable no-console */
     console.log(
-        `Listening at http://localhost:${pkg.port}`
+        `Listening at http://localhost:${process.env.PORT}`
     );
     /* eslint-enable no-console */
 });
