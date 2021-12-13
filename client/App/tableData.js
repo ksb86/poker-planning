@@ -28,9 +28,6 @@ export default (state = initialState, action) => {
         }
 
         case actionTypes.TABLE_UPDATED: {
-            // const userCount = action.payload.users.length;
-            // const votedCount = action.payload.users.filter(user => user.currentVote).length;
-            ;
             !action.payload.tableVoting ? document.title = `Voting Poker` : null;
             return {
                 ...state,
