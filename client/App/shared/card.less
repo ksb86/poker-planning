@@ -1,6 +1,12 @@
 @import '../styles/variables.less';
 
 .card {
+    * {
+        user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+    }
     position: relative;
     cursor: pointer;
     margin: 20px;
