@@ -57,9 +57,9 @@ const Cards = () => {
                 {cards.map((point, i) => {
                     return (
                         <div
-                            key={`${i}-${point}`}
-                            onMouseDown={() => handleCardClick(point)} >
+                            key={`${i}-${point}`}>
                             <Card
+                                onSelect={handleCardClick}
                                 isSelected={voteState === point}
                                 point={point}
                             />
