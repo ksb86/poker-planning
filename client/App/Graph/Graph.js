@@ -7,7 +7,7 @@ import styles from './Graph.less';
 const Graph = () => {
     const { users } = useSelector(state => state.table);
 
-    if (!users.some(user => Boolean(user.currentVote))) {
+    if (!users.some(user => Boolean(user.currentVote && user.currentVote !== 'pass'))) {
         // no one voted
         return <p className={styles.noVotes}>No votes were recorded, click 'New Round' to try again!</p>;
     }
@@ -16,7 +16,7 @@ const Graph = () => {
     const uniquePointTracker = [];
     const data = {};
     users.forEach(({ currentVote }) => {
-        if (currentVote) {
+        if (currentVote && currentVote !== 'pass') {
             if (!uniquePointTracker.includes(currentVote)) {
                 uniquePointTracker.push(currentVote);
                 data[currentVote] = 1;
