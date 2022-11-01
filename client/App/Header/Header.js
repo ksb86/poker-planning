@@ -52,8 +52,9 @@ const Header = () => {
         <div className={styles.headerWrap}>
             <header>
                 <div className={styles.title}>
-                    Better Voting Poker 🎃
+                    Better Voting Poker
                 </div>
+                <div>🎃</div>
                 <div className={styles.headerRight}>
                     {editModeOn ?
                         <form onSubmit={handleSaveNewName}>
