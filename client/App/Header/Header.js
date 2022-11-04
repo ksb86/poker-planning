@@ -54,7 +54,6 @@ const Header = () => {
                 <div className={styles.title}>
                     Better Voting Poker
                 </div>
-                <div>🎃</div>
                 <div className={styles.headerRight}>
                     {editModeOn ?
                         <form onSubmit={handleSaveNewName}>
