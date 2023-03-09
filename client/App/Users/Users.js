@@ -84,8 +84,10 @@ const Users = () => {
                     Assign <strong>{toolTip.name}</strong> as Moderator?
                     <br/>
                     <br/>
-                    <button className="button" type="button" onClick={handleAssignModerator}>Yes</button>&nbsp;&nbsp;&nbsp;
-                    <button className="button" type="button" onClick={() => setToolTip({show: false})}>No</button>
+                    <div className={styles.confirmModeratorButtons}>
+                        <button className="button" type="button" onClick={() => setToolTip({show: false})}>No</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button className="button" type="button" onClick={handleAssignModerator}>Yes</button>
+                    </div>
                 </div>
             }
             <ul className={styles.users}>

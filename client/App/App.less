@@ -1,7 +1,16 @@
 @import './styles/variables.less';
 @import './styles/reset.less';
 @import './styles/shared.less';
+@media (prefers-color-scheme: dark) {
+    body {
+        background: @bg-dark;
+        // transition: opacity 0.5s ease-in-out;
+    }
+    // img:hover {
+        // opacity: 1;
+    // }
+}
 
 * {
-    font-family: Arial, Helvetica, sans-serif
+    font-family: Arial, Helvetica, sans-serif;
 }

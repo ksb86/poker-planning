@@ -3,6 +3,9 @@
 .headerWrap {
     background: @red-bg;
     margin-bottom: 20px;
+    @media (prefers-color-scheme: dark) {
+        background: @red-bg-dark;
+    }
 }
 header {
     padding: 20px;
@@ -11,6 +14,9 @@ header {
     max-width: 1100px;
     margin: auto;
     color: @white;
+    @media (prefers-color-scheme: dark) {
+        color: @white-dark;
+    }
     align-items: center;
 
     @media (max-width: 620px) {

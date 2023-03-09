@@ -1,3 +1,5 @@
+@import '../styles/variables.less';
+
 .table {
     width: 100%;
 }
@@ -8,6 +10,9 @@
 }
 .navItem {
     margin: 0 20px;
+    @media (prefers-color-scheme: dark) {
+        color: @white-dark;
+    }
 
     &.navActive {
         font-weight: bold;

@@ -1,10 +1,40 @@
+@import '../styles/variables.less';
+
 .graphContainer {
     text-align: center;
     width: 100%;
 }
-
+.graph {
+    width: auto;
+}
 .noVotes {
     text-align: center;
     margin-top: 30px;
     width: 100%;
+    @media (prefers-color-scheme: dark) {
+        color: @white-dark;
+    }
+}
+.legend {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    @media (prefers-color-scheme: dark) {
+        color: @white-dark;
+    }
+}
+.legendItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+.legendSwatch {
+    width: 25px;
+    height: 25px;
+    margin: 0 15px;
+    border: 1px solid @grey-border-1-dark;
+    @media (prefers-color-scheme: dark) {
+        border: 1px solid @grey-border-1;
+    }
 }

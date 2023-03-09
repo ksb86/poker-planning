@@ -10,7 +10,16 @@
     margin-top: 20px;
     font-size: 13px;
     color: @blue-link;
+    @media (prefers-color-scheme: dark) {
+        color: @blue-link-dark;
+    }
     &:hover {
         text-decoration: underline;
+    }
+}
+
+.changeModeratorMessage {
+    @media (prefers-color-scheme: dark) {
+        color: @white-dark;
     }
 }

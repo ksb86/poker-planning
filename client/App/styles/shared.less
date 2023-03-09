@@ -3,6 +3,10 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 10px;
+
+        @media (prefers-color-scheme: dark) {
+            color: @white-dark;
+        }
     }
     .form-input {
         font-size: 18px;
@@ -20,6 +24,11 @@
         font-size: 18px;
         cursor: pointer;
         border-bottom: 2px solid @blue-button-border;
+
+        @media (prefers-color-scheme: dark) {
+            background: @blue-button-bg-dark;
+            color: @white-dark;
+        }
 
         &:hover:not([disabled]) {
             background: @blue-button-hover;
