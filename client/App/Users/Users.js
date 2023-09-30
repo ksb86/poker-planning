@@ -58,6 +58,16 @@ const Users = () => {
         });
     };
     const handleAssignModerator = () => {
+        try {
+            window.gtag('event', 'REASSIGN_MODERATOR', {
+                // STATE: state.easter ? 'off' : 'on',
+            });
+        } catch (error) {
+            window.gtag('event', 'REASSIGN_MODERATOR', {
+                ERROR: error.message,
+            });
+        }
+
         db.ref(`tables/${tableId}/users/`).transaction(function(users) {
             let users2;
             users2 = Object.entries(users).reduce((acc, [key, user]) => {

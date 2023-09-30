@@ -64,13 +64,15 @@ const Controls = () => {
 
                 const [average, mode] = calculateAverageAndMode(submittedVotes)
 
-                window.gtag('event', 'collect_votes', {
-                    average,
-                    mode
+                window.gtag('event', 'COLLECT_VOTES', {
+                    AVERAGE: average,
+                    MODE: mode,
+                    USER_COUNT: users.length,
+                    VOTE_COUNT: submittedVotes.length,
                 });
             } catch (error) {
-                window.gtag('event', 'collect_votes_error', {
-                    message: error.message,
+                window.gtag('event', 'COLLECT_VOTES', {
+                    ERROR: error.message,
                 });
             }
         }

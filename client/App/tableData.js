@@ -43,6 +43,15 @@ export default (state = initialState, action) => {
         }
 
         case actionTypes.TOGGLE_EASTER: {
+            try {
+                window.gtag('event', 'EASTER', {
+                    STATE: state.easter ? 'off' : 'on',
+                });
+            } catch (error) {
+                window.gtag('event', 'EASTER', {
+                    ERROR: error.message,
+                });
+            }
             return {
                 ...state,
                 easter: !state.easter
