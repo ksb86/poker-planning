@@ -20,7 +20,7 @@ export default (state = initialState, action) => {
         case actionTypes.USERS_UPDATED: {
             const userCount = action.payload.users.length;
             const votedCount = action.payload.users.filter(user => user.currentVote).length;
-            document.title = `Voting Poker (${votedCount}/${userCount} voted)`;
+            document.title = `${votedCount}/${userCount} Voting Poker`;
             return {
                 ...state,
                 users: action.payload.users
@@ -28,7 +28,7 @@ export default (state = initialState, action) => {
         }
 
         case actionTypes.TABLE_UPDATED: {
-            !action.payload.tableVoting ? document.title = `Voting Poker` : null;
+            !action.payload.tableVoting ? document.title = `⭘ Voting Poker` : null;
             return {
                 ...state,
                 ...action.payload
