@@ -10,7 +10,44 @@
 }
 .red {
     border: 2px solid @red-bg;
+	transform: scale(1);
+	animation: pulse-off .3s ease-in-out;
 }
 .green {
     background: @green;
+	transform: scale(1);
+	animation: pulse-on .3s ease-in-out;
+}
+
+@keyframes pulse-off {
+	0% {
+		transform: scale(1);
+		// box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+	}
+	50% {
+		transform: scale(.75);
+		// box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+	100% {
+		transform: scale(0.95);
+		// box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
+}
+@keyframes pulse-on {
+	0% {
+		transform: scale(1);
+		// box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+	}
+	33% {
+		transform: scale(1.5);
+		// box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+	66% {
+		transform: scale(.75);
+		// box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+	100% {
+		transform: scale(0.95);
+		// box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
 }

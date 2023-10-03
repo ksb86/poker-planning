@@ -1,7 +1,7 @@
 @import '../styles/variables.less';
 
 .users {
-    width: 150px;
+    width: 160px;
 
     @media (max-width: 620px) {
         margin: 20px auto;
@@ -27,6 +27,16 @@
             display: flex;
         }
     }
+}
+.userNameWrap {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    overflow: hidden;
+}
+.userName {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .editing {
     color: @blue-link;

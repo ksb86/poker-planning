@@ -110,7 +110,7 @@ const Users = () => {
                             }
                             key={user.userId}
                             onClick={e => (moderator && editingModerator && !user.moderator) ? handleSelectModerator(e, user) : () => {}}>
-                            <span>
+                            <span className={styles.userNameWrap}>
                                 <span className={styles.userName}>
                                     {user.name}
                                 </span>
