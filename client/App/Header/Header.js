@@ -55,7 +55,7 @@ const Header = () => {
                     Better Voting Poker
                 </div>
                 <div className={styles.holidayIcon}>
-                    🎄
+                    {/* 🎄*/}
                 </div>
                 <div className={styles.headerRight}>
                     {editModeOn ?
