@@ -40,7 +40,7 @@ const Graph = () => {
     });
 
     var doughnutChartData = {
-        labels: sortedDataKeys.map((p) => `${p} pt${p !== '1' ? 's' : ''}`),
+        labels: sortedDataKeys.map((p) => `${p} ${ p !== '☕️' ? `pt${p !== '1' ? 's' : ''}` : ''}`),
         datasets: [
             {
                 backgroundColor: chosenColors,
@@ -61,17 +61,17 @@ const Graph = () => {
                     const numVotes = doughnutChartData.datasets[0].data[i];
                     return (
                         <div className={styles.legendItem} key={i}>
-                            <span className={styles.legendItemCount}>
-                                {doughnutChartData.datasets[0].data[i]} vote
-                                {numVotes !== 1 ? 's' : ''}
-                            </span>
+                            <span className={styles.legendVoteOption}><strong>{label}</strong></span>
                             <span
                                 className={styles.legendSwatch}
                                 style={{
                                     background: doughnutChartData.datasets[0].backgroundColor[i],
                                 }}
                             ></span>
-                            <span className={styles.legendVoteOption}>{label}</span>
+                            <small className={styles.legendItemCount}>
+                                {doughnutChartData.datasets[0].data[i]} vote
+                                {numVotes !== 1 ? 's' : ''}
+                            </small>
                         </div>
                     );
                 })}

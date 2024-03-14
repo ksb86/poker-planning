@@ -56,7 +56,7 @@ const Controls = () => {
                 const users = Object.values(snapshot.val());
 
                 const submittedVotes = users.reduce((acc, { currentVote }) => {
-                    if (Boolean(currentVote) && currentVote !== 'pass') {
+                    if (Boolean(currentVote) && currentVote !== 'pass' && currentVote !== '☕️') {
                         acc.push(currentVote);
                     }
                     return acc;
