@@ -93,7 +93,7 @@ export default () => {
                 :
                 <div className={styles.peek} onClick={() => setIsOpen(true)}>
                     <div className={styles.svg}>
-                        <IoIosArrowUp />
+                        <IoIosArrowUp fill="#242424"/>
                     </div>
                     <div className={styles.link}>
                         <span className={styles.feedbackLink}>Feedback?</span>
